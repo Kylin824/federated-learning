@@ -65,8 +65,6 @@ def mnist_noniid_modified(dataset, num_users):
     max_train = 1000  # 最多1000张
     main_label_prop = 0.8  # 80%来自同一张图片，20%均匀来自其他类图片
 
-
-    idx_shard = [i for i in range(num_shards)]
     dict_users = {i: np.array([], dtype='int64') for i in range(num_users)}
     idxs = np.arange(num_shards * num_imgs)
     labels = dataset.train_labels.numpy()
@@ -76,8 +74,8 @@ def mnist_noniid_modified(dataset, num_users):
     idxs_labels = idxs_labels[:, idxs_labels[1, :].argsort()]
     idxs = idxs_labels[0, :]
 
-    # idx:   [--------------------]    idx代表图片在原始数据集中的索引
-    # label: [0, 0, 0, ... 9, 9, 9]    label代表图片对应的数字标签
+    # idxs:           [--------------------]    idx代表图片在原始数据集中的索引
+    # idxs_labels[1]: [0, 0, 0, ... 9, 9, 9]    label代表图片对应的数字标签
 
 
     for i in range(num_users):
@@ -87,15 +85,31 @@ def mnist_noniid_modified(dataset, num_users):
 
         main_label_size = int(np.floor(datasize * main_label_prop))
         other_label_size = datasize - main_label_size
-        print("user: %d, main_label_size: %d, other_label_size: %d" % (i, main_label_size, other_label_size))
+        # print("user: %d, main_label_size: %d, other_label_size: %d" % (i, main_label_size, other_label_size))
 
+        # main label idx array
         idx_begin = np.random.randint(0, num_imgs - main_label_size) + main_label * num_imgs
-        # print("idx_begin class: %d, end class: %d" %(idxs_labels[1][idx_begin], idxs_labels[1][idx_begin + main_label_size]))
-        dict_users[i] = np.concatenate((dict_users[i], idxs[idx_begin:idx_begin+main_label_size]), axis=0)
+        # print("idx_begin: %d, begin class: %d, end class: %d" %(idx_begin, idxs_labels[1][idx_begin], idxs_labels[1][idx_begin + main_label_size]))
+        dict_users[i] = np.concatenate((dict_users[i], idxs[idx_begin : idx_begin+main_label_size]), axis=0)
 
+        # other label idx array
+        other_label_dict = np.zeros(other_label_size, dtype='int64')
+        for j in range(other_label_size):
+            label = np.random.randint(0, 10)
+            if label == main_label:
+                label = np.random.randint(0, 10)
+            other_label_dict[j] = idxs[int(np.random.randint(0, num_imgs) + label * num_imgs)]
 
+        dict_users[i] = np.concatenate((dict_users[i], other_label_dict), axis=0)
 
-        print("test")
+        for k in range(datasize):
+            idx = dict_users[i][k]
+            print("idx: %d, label: %d" %(dict_users[i][k], labels[idx]))
+
+        print("++++++++++++++++++++++++++++++++++++++")
+
+    return dict_users
+
 
 
 def cifar_iid(dataset, num_users):
