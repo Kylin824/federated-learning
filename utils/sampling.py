@@ -53,17 +53,20 @@ def mnist_noniid(dataset, num_users):
     return dict_users
 
 
-def mnist_noniid_modified(dataset, num_users):
+def mnist_noniid_modified(dataset, num_users, min_train = 200, max_train = 1000, main_label_prop = 0.8):
     """
-    Sample non-i.i.d. client data from mnist dataset
+    non-i.i.d数据生成
     :param dataset:
     :param num_users:
+    :param min_train:
+    :param max_train:
+    :param main_label_prop:
     :return:
     """
     num_shards, num_imgs = 10, 6000  # 10类图片，每类6000张
-    min_train = 200  # 最少200张
-    max_train = 1000  # 最多1000张
-    main_label_prop = 0.8  # 80%来自同一张图片，20%均匀来自其他类图片
+    # min_train = 200  # 最少200张
+    # max_train = 1000  # 最多1000张
+    # main_label_prop = 0.8  # 80%来自同一张图片，20%均匀来自其他类图片
 
     dict_users = {i: np.array([], dtype='int64') for i in range(num_users)}
     idxs = np.arange(num_shards * num_imgs)
@@ -102,14 +105,13 @@ def mnist_noniid_modified(dataset, num_users):
 
         dict_users[i] = np.concatenate((dict_users[i], other_label_dict), axis=0)
 
-        for k in range(datasize):
-            idx = dict_users[i][k]
-            print("idx: %d, label: %d" %(dict_users[i][k], labels[idx]))
+        # for k in range(datasize):
+        #     idx = dict_users[i][k]
+        #     print("idx: %d, label: %d" %(dict_users[i][k], labels[idx]))
 
-        print("++++++++++++++++++++++++++++++++++++++")
+        # print("++++++++++++++++++++++++++++++++++++++")
 
     return dict_users
-
 
 
 def cifar_iid(dataset, num_users):

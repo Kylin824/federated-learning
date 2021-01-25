@@ -11,7 +11,7 @@ from torchvision import datasets, transforms
 import torch
 import time
 
-from utils.sampling import mnist_iid, mnist_noniid, cifar_iid
+from utils.sampling import mnist_iid, mnist_noniid, cifar_iid, mnist_noniid_modified
 from utils.options import args_parser
 from models.Update import LocalUpdate
 from models.Nets import MLP, CNNMnist, CNNCifar
@@ -35,7 +35,9 @@ if __name__ == '__main__':
         if args.iid:
             dict_users = mnist_iid(dataset_train, args.num_users)
         else:
-            dict_users = mnist_noniid(dataset_train, args.num_users)
+            # dict_users = mnist_noniid(dataset_train, args.num_users)
+            dict_users = mnist_noniid_modified(dataset_train, args.num_users, main_label_prop=0.8)
+
     elif args.dataset == 'cifar':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         dataset_train = datasets.CIFAR10('../data/cifar', train=True, download=True, transform=trans_cifar)
