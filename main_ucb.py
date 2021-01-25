@@ -3,7 +3,7 @@
 # Python version: 3.6
 
 import matplotlib
-matplotlib.use('Agg') # 绘图不显示
+matplotlib.use('Agg')  # 绘图不显示
 import matplotlib.pyplot as plt
 import copy
 import numpy as np
@@ -20,13 +20,14 @@ from models.test import test_img
 
 
 if __name__ == '__main__':
-    # 读取参数
+
+    # load args
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
-    print("cuda : ", torch.cuda.is_available())
+    print("cuda is available : ", torch.cuda.is_available())
 
-    # 加载数据，分配用户
+    # load dataset
     if args.dataset == 'mnist':
         trans_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
         dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True, transform=trans_mnist)
@@ -35,9 +36,7 @@ if __name__ == '__main__':
         if args.iid:
             dict_users = mnist_iid(dataset_train, args.num_users)
         else:
-            # dict_users = mnist_noniid(dataset_train, args.num_users)
             dict_users = mnist_noniid_modified(dataset_train, args.num_users, main_label_prop=0.8)
-
     elif args.dataset == 'cifar':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         dataset_train = datasets.CIFAR10('../data/cifar', train=True, download=True, transform=trans_cifar)
@@ -48,6 +47,7 @@ if __name__ == '__main__':
             exit('Error: only consider IID setting in CIFAR10')
     else:
         exit('Error: unrecognized dataset')
+
     img_size = dataset_train[0][0].shape
 
     # build model
@@ -63,43 +63,47 @@ if __name__ == '__main__':
     else:
         exit('Error: unrecognized model')
 
+
     print(global_net)
 
     global_net.train()
 
+    # start time
     time_start = time.time()
 
     # copy weights
     w_glob = global_net.state_dict()
 
-    # training
     loss_train = []
-    cv_loss, cv_acc = [], []
-    val_loss_pre, counter = 0, 0
-    net_best = None
-    best_loss = None
-    val_acc_list, net_list = [], []
 
+    # training
     if args.all_clients: 
         print("Aggregation over all clients")
         w_locals = [w_glob for i in range(args.num_users)]
 
     for round in range(args.epochs):
         loss_locals = []
+
         if not args.all_clients:
             w_locals = []
-        m = max(int(args.frac * args.num_users), 1) # default : m = 0.1 * 100 = 10
 
-        # 候选100个随机选定m个
-        idxs_users = np.random.choice(range(args.num_users), m, replace=False) # 在num_users里面选m个
+        # 设备上报状态特征 [xxxxxxxx]
 
-        for idx in idxs_users:
+        # 根据特征进行linucb选择
+        m = max(int(args.frac * args.num_users), 1)  # default : m = 0.1 * 100 = 10
+        user_idx_this_round = np.random.choice(range(args.num_users), m, replace=False)  # 在num_users里面选m个
+
+        for idx in user_idx_this_round:
+
             local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[idx])
-            w, loss = local.train(net=copy.deepcopy(global_net).to(args.device))
+
+            weight, loss = local.train(net=copy.deepcopy(global_net).to(args.device))
+
             if args.all_clients:
-                w_locals[idx] = copy.deepcopy(w)
+                w_locals[idx] = copy.deepcopy(weight)
             else:
-                w_locals.append(copy.deepcopy(w))
+                w_locals.append(copy.deepcopy(weight))
+
             loss_locals.append(copy.deepcopy(loss))
 
         # update global weights
@@ -114,7 +118,7 @@ if __name__ == '__main__':
         loss_train.append(loss_avg)
 
     time_end = time.time()
-    print('totally cost time: {:3f} s'.format(time_end - time_start))
+    print('totally cost time: {:3f}s'.format(time_end - time_start))
 
     # plot loss curve
     plt.figure()
