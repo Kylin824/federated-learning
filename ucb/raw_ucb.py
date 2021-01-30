@@ -49,30 +49,30 @@ def train():
 
     chosen_count = np.zeros(num_arms)  # 每个老虎机当前已经探索的次数，初始都为0
 
-    for i in range(10):
-        choosen_arm = i % 10
-        reward = np.random.binomial(n=1, p=true_rewards_prop[choosen_arm])
-        best_reward = np.random.binomial(n=1, p=true_rewards_prop[true_max_prop_arm])
-
-        total_reward += reward
-        total_best_reward += best_reward
-        T.append(i)
-        total_reward_with_T.append(total_reward)
-        total_regret_with_T.append(total_best_reward - total_reward)
-
-        if i < 10:
-            estimated_rewards[choosen_arm] = reward
-        else:
-            # estimated_rewards[choosen_arm] = ((i - 1) * estimated_rewards[choosen_arm] + reward) / i
-            estimated_rewards[choosen_arm] = (chosen_count[choosen_arm] * estimated_rewards[choosen_arm] + reward) / (
-                    chosen_count[choosen_arm] + 1)
-        chosen_count[choosen_arm] += 1
+    # for i in range(10):
+    #     choosen_arm = i % 10
+    #     reward = np.random.binomial(n=1, p=true_rewards_prop[choosen_arm])
+    #     best_reward = np.random.binomial(n=1, p=true_rewards_prop[true_max_prop_arm])
+    #
+    #     total_reward += reward
+    #     total_best_reward += best_reward
+    #     T.append(i)
+    #     total_reward_with_T.append(total_reward)
+    #     total_regret_with_T.append(total_best_reward - total_reward)
+    #
+    #     if i < 10:
+    #         estimated_rewards[choosen_arm] = reward
+    #     else:
+    #         # estimated_rewards[choosen_arm] = ((i - 1) * estimated_rewards[choosen_arm] + reward) / i
+    #         estimated_rewards[choosen_arm] = (chosen_count[choosen_arm] * estimated_rewards[choosen_arm] + reward) / (
+    #                 chosen_count[choosen_arm] + 1)
+    #     chosen_count[choosen_arm] += 1
 
     print("\ninit estimated reward: ")
     print(estimated_rewards)
 
     # 初始化
-    for t in range(10, 10000):
+    for t in range(0, 20000):
         upper_bound_probs = [estimated_rewards[item] + calculate_delta(t, chosen_count, item) for item in
                              range(num_arms)]
 
@@ -105,14 +105,18 @@ def train():
 
     print("\ntotal reward: ", total_reward)
     print("\nbest reward: ", total_best_reward)
-    print("choosen arm: ", chosen_count)
+
+    print("\nestimated reward: ")
+    print(estimated_rewards)
+
+    print("\nchoosen arm: ", chosen_count)
 
     # CTR趋势画图
     plt.xlabel("T")
     plt.ylabel("Total regret")
     plt.plot(T, total_regret_with_T)
     # 存入路径
-    plt.savefig('./regret.png')
+    plt.savefig('./regret1.png')
 
 
 if __name__ == "__main__":
