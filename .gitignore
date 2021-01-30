@@ -48,6 +48,3 @@ wheels/
 .venv
 venv/
 ENV/
-
-!/client_state
-
