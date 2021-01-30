@@ -49,5 +49,5 @@ wheels/
 venv/
 ENV/
 
-!/client_state/
+!/client_state
 
