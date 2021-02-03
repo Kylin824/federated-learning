@@ -8,13 +8,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 初始化
-def init(numFeatures, numArms):
+def init(num_features, num_arms):
     # 初始化A，b，θ，p
-    A = np.array([np.eye(numFeatures).tolist()] * numArms)
-    b = np.zeros((numArms, numFeatures,1))
+    A = np.array([np.eye(num_features).tolist()] * num_arms)
+    b = np.zeros((num_arms, num_features, 1))
 
-    theta = np.zeros((numArms, numFeatures,1))
-    p = np.zeros(numArms)
+    theta = np.zeros((num_arms, num_features, 1))
+    p = np.zeros(num_arms)
     return A, b, theta, p
 
 # 训练
@@ -25,18 +25,18 @@ def train(data_array):
     T = []
 
     # 可选的臂（根据数据）
-    numArms = 10
+    num_arms = 10
     # 历史数据数
     trials = data_array.shape[0]  # 在这里等于user ID
     # 臂特征数（根据数据）
     # 第一列为推荐系统推荐的文章号，第二列为回报，第三列及之后都为文章特征
-    numFeatures = data_array.shape[1] - 2
+    num_features = data_array.shape[1] - 2
     # 总回报
     total_payoff = 0
     count = 0
 
     # 初始化
-    A, b, theta, p = init(numFeatures, numArms)
+    A, b, theta, p = init(num_features, num_arms)
 
     for t in range(0, trials):
         # 每行数据
@@ -58,7 +58,7 @@ def train(data_array):
         # alpha = float(i) / (t + 1)
 
         # 求每个臂的p
-        for a in range(0, numArms):
+        for a in range(0, num_arms):
             # 求逆
             A_inv = np.linalg.inv(A[a])
             # 相乘

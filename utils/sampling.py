@@ -80,7 +80,6 @@ def mnist_noniid_modified(dataset, num_users, min_train = 200, max_train = 1000,
     # idxs:           [--------------------]    idx代表图片在原始数据集中的索引
     # idxs_labels[1]: [0, 0, 0, ... 9, 9, 9]    label代表图片对应的数字标签
 
-
     for i in range(num_users):
         datasize = np.random.randint(min_train, max_train + 1)  # 随机数量
         main_label = np.random.randint(0, 10)  # 0-9随机选一个为主类
@@ -130,13 +129,26 @@ def cifar_iid(dataset, num_users):
 
 
 if __name__ == '__main__':
-    dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True,
-                                   transform=transforms.Compose([
-                                       transforms.ToTensor(),
-                                       transforms.Normalize((0.1307,), (0.3081,))
-                                   ]))
-    num_user = 5
-    # d = mnist_iid(dataset_train, num)
-    # d = mnist_noniid(dataset_train, num)
-    d = mnist_noniid_modified(dataset_train, num_user)
-    print("test")
+    # dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True,
+    #                                transform=transforms.Compose([
+    #                                    transforms.ToTensor(),
+    #                                    transforms.Normalize((0.1307,), (0.3081,))
+    #                                ]))
+    # num_user = 100
+    # # d = mnist_iid(dataset_train, num)
+    # # d = mnist_noniid(dataset_train, num)
+    #
+    # np.random.seed(0)
+    #
+    # dict = mnist_noniid_modified(dataset_train, num_user)
+    # print("dict shape: ", len(dict))
+    # np.save('./noniid.npy', dict)
+
+    # dict_load = np.load('./noniid.npy', allow_pickle=True)
+    # dict = dict_load.item()
+    # print(len(dict[0]))
+
+    cs = np.load('../sim_client_feature.npy')
+    print(cs[0])
+
+
