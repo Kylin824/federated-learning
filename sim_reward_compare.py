@@ -42,6 +42,9 @@ def calculate_reward(sim_client_state, client_idx):
     reward = 0
     if cur_cq + cur_nq + next_cq + next_nq >= 2:
         reward = client_datasize / 1000
+        # reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize / 1000
+        # reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize / 2000
+        # reward = cur_cq + cur_nq + next_cq + next_nq - 2
 
     return reward
 
@@ -56,26 +59,30 @@ if __name__ == "__main__":
 
     client_arm_num = 100
 
-    round_num = 100
+    round_num = 200
     round_client_num = 10
     round_client_idx = []
 
 
     total_random_reward = 0
+    random_reward_list = []
     random_chosen_count = np.zeros(client_arm_num)
 
     total_fedcs_reward = 0
+    fedcs_reward_list = []
     fedcs_chosen_count = np.zeros(client_arm_num)
 
     # ucb attributes
     ucb_estimated_rewards = np.zeros(client_arm_num)
     ucb_chosen_count = np.zeros(client_arm_num)
     total_ucb_reward = 0
+    ucb_reward_list = []
 
     # linucb attributes
     A, b, theta, p = linucb_init(client_feature_num, client_arm_num)
-    total_linucb_reward = 0
     linucb_chosen_count = np.zeros(client_arm_num)
+    total_linucb_reward = 0
+    linucb_reward_list = []
 
     client_idxs = np.arange(100)
 
@@ -92,6 +99,8 @@ if __name__ == "__main__":
             total_random_reward += reward
 
             random_chosen_count[idx] += 1
+
+        random_reward_list.append(total_random_reward)
 
         # fedcs choose 1
         round_client_idx = np.random.choice(client_idxs, size=int(2*round_client_num), replace=False)
@@ -115,6 +124,7 @@ if __name__ == "__main__":
                 fedcs_chosen_count[idx] += 1
                 total_fedcs_reward += reward
 
+        fedcs_reward_list.append(total_fedcs_reward)
 
         # ucb choose
 
@@ -145,6 +155,8 @@ if __name__ == "__main__":
 
             ucb_chosen_count[chosen_client_arm] += 1
 
+
+        ucb_reward_list.append(total_ucb_reward)
 
         # linucb choose
         alpha = 0.25
@@ -178,6 +190,8 @@ if __name__ == "__main__":
 
             linucb_chosen_count[chosen_client_arm] += 1
 
+        linucb_reward_list.append(total_linucb_reward)
+
 
     print("total_random_reward: ", total_random_reward)
     print("total_fedcs_reward: ", total_fedcs_reward)
@@ -186,20 +200,40 @@ if __name__ == "__main__":
 
     print("estimated_ucb_reward: \n", ucb_estimated_rewards)
 
-    print("random chosen count: \n", random_chosen_count)
+    print("\ndata size: ")
+    for i in range(100):
+        print(int(sim_client_state[i][6]), end='  ')
 
-    print("fedcs chosen count: \n", fedcs_chosen_count)
+    print("")
 
-    print("ucb chosen count: \n", ucb_chosen_count)
+    print("\nclient index: ")
+    for i in range(100):
+        print("%3d" %i, end='  ')
 
-    print("linucb chosen count: \n", linucb_chosen_count)
+    print("")
 
+    print("\nrandom chosen count: ")
+    for i in range(100):
+        print("%3d" % int(random_chosen_count[i]), end='  ')
 
-    flag_idx = np.arange(0, 100, 1.0)
-    print("idx: \n", flag_idx)
-    # # 归一化p
-    # p_max = np.max(p)
-    # p_min = np.min(p)
-    # p = (p - p_min) / (p_max - p_min)
-    # print("linucb p: \n", p)
+    print("\nfedcs chosen count: ")
+    for i in range(100):
+        print("%3d" % int(fedcs_chosen_count[i]), end='  ')
 
+    print("\nucb chosen count: ")
+    for i in range(100):
+        print("%3d" % int(ucb_chosen_count[i]), end='  ')
+
+    print("\nlinucb chosen count: ")
+    for i in range(100):
+        print("%3d" % int(linucb_chosen_count[i]), end='  ')
+
+    x = np.arange(round_num)
+    plt.xlabel("round")
+    plt.ylabel("cumulative reward")
+    plt.plot(x, random_reward_list, label='random')
+    plt.plot(x, fedcs_reward_list, label='fedcs')
+    plt.plot(x, ucb_reward_list, label='ucb')
+    plt.plot(x, linucb_reward_list, label='linucb')
+    plt.legend()
+    plt.show()
