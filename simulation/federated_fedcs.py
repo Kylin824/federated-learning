@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
             # print loss
             loss_avg = sum(loss_locals) / len(loss_locals)
-            print('Round {:3d}, Average loss {:.3f}'.format(round, loss_avg))
+            print('Round {:3d}, Average loss {:.3f}, valid {:3d}'.format(round, loss_avg, len(user_idx_this_round)))
             loss_avg_client.append(loss_avg)
 
             last_loss_avg = loss_avg
@@ -128,7 +128,7 @@ if __name__ == '__main__':
             last_acc_global = acc_test
         else:
 
-            print('Round {:3d}, Average loss {:.3f}, null client'.format(round, last_loss_avg))
+            print('Round {:3d}, Average loss {:.3f}, 0 !'.format(round, last_loss_avg))
             loss_avg_client.append(last_loss_avg)
             acc_global_model.append(last_acc_global)
 
