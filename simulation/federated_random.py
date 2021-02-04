@@ -76,7 +76,8 @@ if __name__ == '__main__':
     # copy weights
     w_glob = global_net.state_dict()
 
-    loss_train = []
+    loss_avg_client = []
+    acc_global_model = []
 
     # training
     if args.all_clients:
@@ -84,6 +85,7 @@ if __name__ == '__main__':
         w_locals = [w_glob for i in range(args.num_users)]
 
     last_loss_avg = 0
+    last_acc_global = 0
 
     for round in range(args.epochs):
         loss_locals = []
@@ -119,27 +121,41 @@ if __name__ == '__main__':
             # print loss
             loss_avg = sum(loss_locals) / len(loss_locals)
             print('Round {:3d}, Average loss {:.3f}'.format(round, loss_avg))
-            loss_train.append(loss_avg)
+            loss_avg_client.append(loss_avg)
 
             last_loss_avg = loss_avg
 
+            acc_test, loss_test = test_img(global_net, dataset_test, args)
+
+            acc_global_model.append(acc_test)
+
+            last_acc_global = acc_test
         else:
 
             print('Round {:3d}, Average loss {:.3f}, null client'.format(round, last_loss_avg))
-            loss_train.append(last_loss_avg)
+            loss_avg_client.append(last_loss_avg)
+            acc_global_model.append(last_acc_global)
 
     # time_end = time.time()
     # print('totally cost time: {:3f}s'.format(time_end - time_start))
 
     # plot loss curve
     plt.figure()
-    plt.plot(range(len(loss_train)), loss_train)
+    plt.plot(range(len(loss_avg_client)), loss_avg_client)
     plt.ylabel('train_loss')
-    plt.savefig('./save/fed_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+    plt.savefig('loss_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+
+    plt.figure()
+    plt.plot(range(len(acc_global_model)), acc_global_model)
+    plt.ylabel('acc_global')
+    plt.savefig('acc_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+
+    np.savetxt('loss_random_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
+    np.savetxt('acc_random_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
 
     # testing
     global_net.eval()
-    acc_train, loss_train = test_img(global_net, dataset_train, args)
+    acc_train, loss_avg_client = test_img(global_net, dataset_train, args)
     acc_test, loss_test = test_img(global_net, dataset_test, args)
     print("Training accuracy: {:.2f}".format(acc_train))
     print("Testing accuracy: {:.2f}".format(acc_test))
