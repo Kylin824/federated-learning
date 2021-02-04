@@ -7,7 +7,7 @@
 .xlsx
 .pdf
 .json
-
+data
 # macOS
 .DS_Store
 
@@ -48,3 +48,4 @@ wheels/
 .venv
 venv/
 ENV/
+/data/
