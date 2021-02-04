@@ -15,6 +15,10 @@ from models.Fed import FedAvg
 from models.test import test_img
 
 
+'''
+    run command: python federated_random.py --dataset mnist --iid --num_channels 1 --model cnn --epochs 200 --gpu -1
+'''
+
 if __name__ == '__main__':
 
     valid_list = np.loadtxt('valid_list_random.txt')

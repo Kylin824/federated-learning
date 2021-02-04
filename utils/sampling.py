@@ -64,6 +64,9 @@ def mnist_noniid_modified(dataset, num_users, min_train = 200, max_train = 1000,
     每个client 80%数据为一类图片， 20%为其他类图片
 
     """
+
+    np.random.seed(0)
+
     num_shards, num_imgs = 10, 6000  # 10类图片，每类6000张
     # min_train = 200  # 最少200张
     # max_train = 1000  # 最多1000张
