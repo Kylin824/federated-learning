@@ -116,19 +116,22 @@ if __name__ == '__main__':
 
             # print loss
             loss_avg = sum(loss_locals) / len(loss_locals)
-            print('Round {:3d}, Average loss {:.3f}, valid {:3d}'.format(round, loss_avg, len(user_idx_this_round)))
-            loss_avg_client.append(loss_avg)
 
-            last_loss_avg = loss_avg
+            loss_avg_client.append(loss_avg)
 
             acc_test, loss_test = test_img(global_net, dataset_test, args)
 
             acc_global_model.append(acc_test)
 
+            last_loss_avg = loss_avg
             last_acc_global = acc_test
+
+            print('Round {:3d}, Average loss {:.3f}, Global acc: {:.3f}, valid {:3d}'
+                  .format(round, loss_avg, acc_test, len(user_idx_this_round)))
         else:
 
-            print('Round {:3d}, Average loss {:.3f}, 0 !'.format(round, last_loss_avg))
+            print('Round {:3d}, Average loss {:.3f}, Global acc: {:.3f} 0 !'
+                  .format(round, last_loss_avg, last_acc_global))
             loss_avg_client.append(last_loss_avg)
             acc_global_model.append(last_acc_global)
 
