@@ -150,8 +150,9 @@ if __name__ == "__main__":
                 reward = calculate_reward(sim_client_state, idx)
 
                 if reward > 0:
-                    round_valid_client_idx[valid_count] = idx
                     fedcs_total_valid += 1
+                    round_valid_client_idx[valid_count] = idx
+                    valid_count += 1
 
                 total_fedcs_selected_num += 1
                 fedcs_chosen_count[idx] += 1
@@ -186,8 +187,9 @@ if __name__ == "__main__":
             reward = calculate_reward(sim_client_state, chosen_client_arm)
 
             if reward > 0:
-                round_valid_client_idx[valid_count] = idx
                 ucb_total_valid += 1
+                round_valid_client_idx[valid_count] = idx
+                valid_count += 1
 
             total_ucb_reward += reward
 
@@ -240,8 +242,9 @@ if __name__ == "__main__":
             reward = calculate_reward(sim_client_state, chosen_client_arm)
 
             if reward > 0:
-                round_valid_client_idx[valid_count] = idx
                 linucb_total_valid += 1
+                round_valid_client_idx[valid_count] = idx
+                valid_count += 1
 
             total_linucb_reward += reward
 
