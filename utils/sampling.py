@@ -146,7 +146,7 @@ if __name__ == '__main__':
 
     dict = mnist_noniid_modified(dataset_train, num_user)
 
-    np.save('../simulation/dataset_noniid_200_1000.npy', dict)
+    # np.save('../simulation/dataset_noniid_200_1000.npy', dict)
 
 
     # cs = np.load('../simulative_client_state.npy')
