@@ -17,8 +17,7 @@ from models.test import test_img
 
 if __name__ == '__main__':
 
-    chosen_list = np.loadtxt('chosen_list_random.txt')
-
+    valid_list = np.loadtxt('valid_list_random.txt')
 
     # load args
     args = args_parser()
@@ -80,37 +79,50 @@ if __name__ == '__main__':
         print("Aggregation over all clients")
         w_locals = [w_glob for i in range(args.num_users)]
 
+    last_loss_avg = 0
+
     for round in range(args.epochs):
         loss_locals = []
 
         if not args.all_clients:
             w_locals = []
 
-        user_idx_this_round = chosen_list[round]
+        round_idx = valid_list[round]
 
-        for idx in user_idx_this_round:
+        user_idx_this_round = round_idx[np.where(round_idx != -1)]
 
-            local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[idx])
+        if len(user_idx_this_round) > 0:
 
-            weight, loss = local.train(net=copy.deepcopy(global_net).to(args.device))
+            for idx in user_idx_this_round:
 
-            if args.all_clients:
-                w_locals[idx] = copy.deepcopy(weight)
-            else:
-                w_locals.append(copy.deepcopy(weight))
+                local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[idx])
 
-            loss_locals.append(copy.deepcopy(loss))
+                weight, loss = local.train(net=copy.deepcopy(global_net).to(args.device))
 
-        # update global weights
-        w_glob = FedAvg(w_locals)
+                if args.all_clients:
+                    w_locals[idx] = copy.deepcopy(weight)
+                else:
+                    w_locals.append(copy.deepcopy(weight))
 
-        # copy weight to net_glob
-        global_net.load_state_dict(w_glob)
+                loss_locals.append(copy.deepcopy(loss))
 
-        # print loss
-        loss_avg = sum(loss_locals) / len(loss_locals)
-        print('Round {:3d}, Average loss {:.3f}'.format(round, loss_avg))
-        loss_train.append(loss_avg)
+            # update global weights
+            w_glob = FedAvg(w_locals)
+
+            # copy weight to net_glob
+            global_net.load_state_dict(w_glob)
+
+            # print loss
+            loss_avg = sum(loss_locals) / len(loss_locals)
+            print('Round {:3d}, Average loss {:.3f}'.format(round, loss_avg))
+            loss_train.append(loss_avg)
+
+            last_loss_avg = loss_avg
+
+        else:
+
+            print('Round {:3d}, Average loss {:.3f}, null client'.format(round, last_loss_avg))
+            loss_train.append(last_loss_avg)
 
     # time_end = time.time()
     # print('totally cost time: {:3f}s'.format(time_end - time_start))
@@ -119,7 +131,7 @@ if __name__ == '__main__':
     plt.figure()
     plt.plot(range(len(loss_train)), loss_train)
     plt.ylabel('train_loss')
-    plt.savefig('./save/fed_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+    plt.savefig('./save/fed_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
     # testing
     global_net.eval()
