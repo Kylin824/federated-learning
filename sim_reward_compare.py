@@ -41,12 +41,9 @@ def calculate_reward(sim_client_state, client_idx):
 
     reward = 0
     if cur_cq + cur_nq + next_cq + next_nq >= 2:
-        # reward = client_datasize / 1000
-        # reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize / 1000
-        # reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize / 2000
-        # reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize / 5000
-        reward = cur_cq + cur_nq + next_cq + next_nq - 2
-
+        # reward = client_datasize
+        reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * 2
+        # reward = cur_cq + cur_nq + next_cq + next_nq - 1
     return reward
 
 
@@ -56,14 +53,13 @@ if __name__ == "__main__":
 
     client_feature_num = 7
 
-    np.random.seed(1)
+    np.random.seed(24)
 
     client_arm_num = 100
 
     round_num = 200
     round_client_num = 10
     round_client_idx = []
-
 
     total_random_reward = 0
     random_reward_list = []
@@ -84,6 +80,8 @@ if __name__ == "__main__":
     linucb_chosen_count = np.zeros(client_arm_num)
     total_linucb_reward = 0
     linucb_reward_list = []
+    linucb_client_feature = []
+
 
     client_idxs = np.arange(100)
 
@@ -160,20 +158,13 @@ if __name__ == "__main__":
         ucb_reward_list.append(total_ucb_reward)
 
         # linucb choose
-        alpha = 0.25
+        alpha = 1
 
-        for i in range(round_client_num):
+        if round == 0:
 
-            round_client_idx = np.random.choice(client_idxs, size=round_client_num, replace=False)
-
-            client_feature = []
-
-            for idx in round_client_idx:
-                client_feature.append(sim_client_state[idx][:7])
-
-            # 求每个臂的p
-            for a in range(10):
-                x_t = np.expand_dims(client_feature[a], axis=1)
+            for a in range(100):
+                linucb_client_feature.append(sim_client_state[a][:7])
+                x_t = np.expand_dims(linucb_client_feature[a], axis=1)
                 # 求逆
                 A_inv = np.linalg.inv(A[a])
                 # 相乘
@@ -181,7 +172,21 @@ if __name__ == "__main__":
                 # 求臂的p
                 p[a] = np.matmul(theta[a].T, x_t) + alpha * np.sqrt(np.matmul(np.matmul(x_t.T, A_inv), x_t))
 
-            best_pred_client_arm = int(np.argmax(p))
+        for i in range(round_client_num):
+
+            round_client_idx = np.random.choice(client_idxs, size=round_client_num, replace=False)
+
+            # 求每个臂的p
+            for idx in round_client_idx:
+                x_t = np.expand_dims(linucb_client_feature[idx], axis=1)
+                # 求逆
+                A_inv = np.linalg.inv(A[idx])
+                # 相乘
+                theta[idx] = np.matmul(A_inv, b[idx])
+                # 求臂的p
+                p[idx] = np.matmul(theta[idx].T, x_t) + alpha * np.sqrt(np.matmul(np.matmul(x_t.T, A_inv), x_t))
+
+            best_pred_client_arm = int(np.argmax(p[round_client_idx]))
 
             chosen_client_arm = round_client_idx[best_pred_client_arm]
 
@@ -203,7 +208,7 @@ if __name__ == "__main__":
 
     print("\ndata size: ")
     for i in range(100):
-        print(int(sim_client_state[i][6]), end='  ')
+        print(int(sim_client_state[i][6] * 1000), end='  ')
 
     print("")
 
@@ -228,6 +233,20 @@ if __name__ == "__main__":
     print("\nlinucb chosen count: ")
     for i in range(100):
         print("%3d" % int(linucb_chosen_count[i]), end='  ')
+    print("")
+    print("\nvalid client idx: ")
+    valid_client_idx = []
+    for i in range(100):
+        client_state = sim_client_state[i]
+        cur_cq = client_state[1]
+        cur_nq = client_state[2]
+        next_cq = client_state[8]
+        next_nq = client_state[9]
+        if cur_cq + cur_nq + next_cq + next_nq >= 2:
+            valid_client_idx.append(i)
+
+    print(valid_client_idx)
+
 
     x = np.arange(round_num)
     plt.xlabel("round")

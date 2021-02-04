@@ -38,7 +38,7 @@ for i in range(100):
     c[2] = np.random.normal(loc=poi_cq_prob[int(c[0])], scale=0.1, size=1)  # current_communication
 
     # real_poi
-    if np.random.rand() <= 0.8:  # 移动概率 (80%概率不动，20%概率移动）
+    if np.random.rand() <= 0.5:  # 移动概率 (50%概率不动，50%概率移动）
         c[7] = c[0]
     else:
         c[7] = np.random.randint(low=0, high=8)
@@ -53,7 +53,7 @@ for i in range(100):
     c[4] = np.random.normal(loc=poi_cu_prob[int(c[6])], scale=0.1, size=1)
     c[5] = np.random.normal(loc=poi_cq_prob[int(c[6])], scale=0.1, size=1)
 
-    c[6] = len(client_dataset[i])
+    c[6] = len(client_dataset[i]) / 1000
 
 print(client_state_list)
 np.save('../sim_client_feature.npy', client_state_list)
