@@ -1,10 +1,8 @@
 import numpy as np
-import math
 
-# cur_poi, cur_cu, cur_cq, real_poi, real_cu, real_cq, pred_poi, pred_cu, pred_cq, datasize
 client_state_list = np.zeros((100, 10))
 
-client_dataset = np.load("../utils/noniid.npy", allow_pickle=True)
+client_dataset = np.load("noniid_dataset.npy", allow_pickle=True)
 client_dataset = client_dataset.item()
 
 poi_cu_prob = [0.5, 0.4, 0.6, 0.4, 0.6, 0.4, 0.5, 0.6]
@@ -56,4 +54,5 @@ for i in range(100):
     c[9] = len(client_dataset[i]) / 1000
 
 print(client_state_list)
-np.save('../sim_client_feature.npy', client_state_list)
+
+np.save('sim_client_feature.npy', client_state_list)

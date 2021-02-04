@@ -43,8 +43,8 @@ def calculate_reward(sim_client_state, client_idx):
     next_nq = client_state[4]
 
     reward = 0
-    if cur_cq + cur_nq + next_cq + next_nq >= 2:
-    # if cur_cq + cur_nq >= 1 and next_cq + next_nq >= 1:
+    # if cur_cq + cur_nq + next_cq + next_nq >= 2:
+    if cur_cq + cur_nq >= 1 and next_cq + next_nq >= 1:
         # reward = client_datasize
         reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * beta
     return reward

@@ -56,12 +56,13 @@ def mnist_noniid(dataset, num_users):
 def mnist_noniid_modified(dataset, num_users, min_train = 200, max_train = 1000, main_label_prop = 0.8):
     """
     non-i.i.d数据生成
-    :param dataset:
-    :param num_users:
-    :param min_train:
-    :param max_train:
-    :param main_label_prop:
-    :return:
+
+    100个client
+
+    数量分布随机从min_train到max_train
+
+    每个client 80%数据为一类图片， 20%为其他类图片
+
     """
     num_shards, num_imgs = 10, 6000  # 10类图片，每类6000张
     # min_train = 200  # 最少200张
@@ -129,26 +130,23 @@ def cifar_iid(dataset, num_users):
 
 
 if __name__ == '__main__':
-    # dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True,
-    #                                transform=transforms.Compose([
-    #                                    transforms.ToTensor(),
-    #                                    transforms.Normalize((0.1307,), (0.3081,))
-    #                                ]))
-    # num_user = 100
-    # # d = mnist_iid(dataset_train, num)
-    # # d = mnist_noniid(dataset_train, num)
-    #
-    # np.random.seed(0)
-    #
-    # dict = mnist_noniid_modified(dataset_train, num_user)
-    # print("dict shape: ", len(dict))
-    # np.save('./noniid.npy', dict)
+    dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True,
+                                   transform=transforms.Compose([
+                                       transforms.ToTensor(),
+                                       transforms.Normalize((0.1307,), (0.3081,))
+                                   ]))
+    num_user = 100
+    # d = mnist_iid(dataset_train, num)
+    # d = mnist_noniid(dataset_train, num)
 
-    # dict_load = np.load('./noniid.npy', allow_pickle=True)
-    # dict = dict_load.item()
-    # print(len(dict[0]))
+    np.random.seed(0)
 
-    cs = np.load('../sim_client_feature.npy')
-    print(cs[0])
+    dict = mnist_noniid_modified(dataset_train, num_user)
+
+    np.save('../simulation/noniid_dataset.npy', dict)
+
+
+    # cs = np.load('../sim_client_feature.npy')
+    # print(cs[0])
 
 
