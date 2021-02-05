@@ -17,7 +17,7 @@ from models.test import test_img
 
 if __name__ == '__main__':
 
-    valid_list = np.loadtxt('valid_list_fedcs.txt')
+    valid_list = np.loadtxt('valid_list_ucb.txt')
 
     # load args
     args = args_parser()
@@ -142,15 +142,15 @@ if __name__ == '__main__':
     plt.figure()
     plt.plot(range(len(loss_avg_client)), loss_avg_client)
     plt.ylabel('train_loss')
-    plt.savefig('loss_fedcs_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+    plt.savefig('loss_ucb_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
     plt.figure()
     plt.plot(range(len(acc_global_model)), acc_global_model)
     plt.ylabel('acc_global')
-    plt.savefig('acc_fedcs_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+    plt.savefig('acc_ucb_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
-    np.savetxt('loss_fedcs_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
-    np.savetxt('acc_fedcs_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
+    np.savetxt('loss_ucb_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
+    np.savetxt('acc_ucb_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
 
     # testing
     global_net.eval()
