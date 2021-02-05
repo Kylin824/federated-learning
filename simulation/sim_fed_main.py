@@ -151,8 +151,8 @@ if __name__ == '__main__':
     plt.show()
     # plt.savefig('acc_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
-    np.savetxt('loss_ucb_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
-    np.savetxt('acc_ucb_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
+    np.savetxt('res/loss_ucb_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
+    np.savetxt('res/acc_ucb_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
 
     # # testing
     # global_net.eval()
