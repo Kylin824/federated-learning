@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('Agg')  # 绘图不显示
+# matplotlib.use('Agg')  # 绘图不显示
 import matplotlib.pyplot as plt
 import copy
 import numpy as np
@@ -7,7 +7,7 @@ from torchvision import datasets, transforms
 import torch
 import time
 
-from utils.sampling import mnist_iid, cifar_iid, mnist_noniid_modified
+from utils.sampling import mnist_iid, cifar_iid, mnist_noniid, mnist_noniid_modified
 from utils.options import args_parser
 from models.Update import LocalUpdate
 from models.Nets import MLP, CNNMnist, CNNCifar
@@ -34,7 +34,8 @@ if __name__ == '__main__':
         if args.iid:
             dict_users = mnist_iid(dataset_train, args.num_users)
         else:
-            dict_users = mnist_noniid_modified(dataset_train, args.num_users, main_label_prop=0.8)
+            # dict_users = mnist_noniid(dataset_train, args.num_users)
+            dict_users = mnist_noniid_modified(dataset_train, args.num_users, main_label_prop=0.9)
     elif args.dataset == 'cifar':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         dataset_train = datasets.CIFAR10('../data/cifar', train=True, download=True, transform=trans_cifar)
@@ -138,24 +139,25 @@ if __name__ == '__main__':
     # time_end = time.time()
     # print('totally cost time: {:3f}s'.format(time_end - time_start))
 
-    # plot loss curve
-    plt.figure()
-    plt.plot(range(len(loss_avg_client)), loss_avg_client)
-    plt.ylabel('train_loss')
-    plt.savefig('loss_ucb_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+    # # plot loss curve
+    # plt.figure()
+    # plt.plot(range(len(loss_avg_client)), loss_avg_client)
+    # plt.ylabel('train_loss')
+    # plt.savefig('loss_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
     plt.figure()
     plt.plot(range(len(acc_global_model)), acc_global_model)
     plt.ylabel('acc_global')
-    plt.savefig('acc_ucb_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+    plt.show()
+    # plt.savefig('acc_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
     np.savetxt('loss_ucb_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
     np.savetxt('acc_ucb_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
 
-    # testing
-    global_net.eval()
-    acc_train, loss_avg_client = test_img(global_net, dataset_train, args)
-    acc_test, loss_test = test_img(global_net, dataset_test, args)
-    print("Training accuracy: {:.2f}".format(acc_train))
-    print("Testing accuracy: {:.2f}".format(acc_test))
+    # # testing
+    # global_net.eval()
+    # acc_train, loss_avg_client = test_img(global_net, dataset_train, args)
+    # acc_test, loss_test = test_img(global_net, dataset_test, args)
+    # print("Training accuracy: {:.2f}".format(acc_train))
+    # print("Testing accuracy: {:.2f}".format(acc_test))
 

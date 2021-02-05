@@ -35,8 +35,8 @@ if __name__ == '__main__':
         if args.iid:
             dict_users = mnist_iid(dataset_train, args.num_users)
         else:
-            # dict_users = mnist_noniid(dataset_train, args.num_users)
-            dict_users = mnist_noniid_modified(dataset_train, args.num_users, main_label_prop=0.8)
+            dict_users = mnist_noniid(dataset_train, args.num_users)
+            # dict_users = mnist_noniid_modified(dataset_train, args.num_users, main_label_prop=0.8)
 
     elif args.dataset == 'cifar':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -88,6 +88,7 @@ if __name__ == '__main__':
         loss_locals = []
         if not args.all_clients:
             w_locals = []
+
         m = max(int(args.frac * args.num_users), 1) # default : m = 0.1 * 100 = 10
 
         # 候选100个随机选定m个
@@ -120,7 +121,7 @@ if __name__ == '__main__':
     plt.figure()
     plt.plot(range(len(loss_train)), loss_train)
     plt.ylabel('train_loss')
-    plt.savefig('./save/fed_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
+    plt.savefig('./fed_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
     # testing
     global_net.eval()
