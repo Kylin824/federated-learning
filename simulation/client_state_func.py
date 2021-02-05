@@ -1,6 +1,6 @@
 import numpy as np
 
-def client_state_create():
+def create_client_state():
     client_state_list = np.zeros((100, 10))
 
     client_dataset = np.load("dataset_noniid_200_1000.npy", allow_pickle=True)
@@ -58,7 +58,7 @@ def client_state_create():
     np.save('simulative_client_state.npy', client_state_list)
 
 
-def client_state_read():
+def read_client_state():
     client_state = np.load('simulative_client_state.npy')
     i = 0
     for s in client_state:
@@ -79,4 +79,5 @@ def print_valid_client_each_round():
 
 
 if __name__ == "__main__":
-    print_valid_client_each_round()
+    # print_valid_client_each_round()
+    read_client_state()
