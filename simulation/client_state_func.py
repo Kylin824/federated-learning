@@ -67,14 +67,16 @@ def client_state_read():
         i += 1
 
 
-if __name__ == "__main__":
-    # client_state_read()
-
-    # valid_list = np.loadtxt('valid_list_random.txt')
-    valid_list = np.loadtxt('valid_list_fedcs.txt')
+def print_valid_client_each_round():
+    # valid_list = np.loadtxt('valid_list_fedcs.txt')
+    valid_list = np.loadtxt('valid_list_random.txt')
     # valid_list = np.loadtxt('valid_list_ucb.txt')
     # valid_list = np.loadtxt('valid_list_linucb.txt')
     for round in range(len(valid_list)):
         total_this_round = valid_list[round]
         valid_this_round = total_this_round[np.where(total_this_round != -1)]
         print(valid_this_round)
+
+
+if __name__ == "__main__":
+    print_valid_client_each_round()
