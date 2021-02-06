@@ -131,7 +131,7 @@ if __name__ == "__main__":
         random_reward_list.append(total_random_reward)
 
         # fedcs choose 1
-        round_client_idx = np.random.choice(client_idxs, size=int(3*round_client_num), replace=False)
+        round_client_idx = np.random.choice(client_idxs, size=int(2*round_client_num), replace=False)
 
         total_fedcs_selected_num = 0
 
@@ -356,7 +356,7 @@ if __name__ == "__main__":
 
 
     # 保存历史选择
-    # np.savetxt('valid_list_random.txt', random_chosen_valid_list)
-    # np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
+    np.savetxt('valid_list_random.txt', random_chosen_valid_list)
+    np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
     np.savetxt('valid_list_ucb.txt', ucb_chosen_valid_list)
     np.savetxt('valid_list_linucb.txt', linucb_chosen_valid_list)
