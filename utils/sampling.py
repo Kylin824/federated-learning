@@ -133,23 +133,31 @@ def cifar_iid(dataset, num_users):
 
 
 if __name__ == '__main__':
-    dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True,
-                                   transform=transforms.Compose([
-                                       transforms.ToTensor(),
-                                       transforms.Normalize((0.1307,), (0.3081,))
-                                   ]))
+
     num_user = 100
-    # d = mnist_iid(dataset_train, num)
-    # d = mnist_noniid(dataset_train, num)
 
-    np.random.seed(0)
-
-    dict = mnist_noniid_modified(dataset_train, num_user)
+    # dataset_train = datasets.MNIST('../data/mnist/', train=True, download=False,
+    #                                transform=transforms.Compose([
+    #                                    transforms.ToTensor(),
+    #                                    transforms.Normalize((0.1307,), (0.3081,))
+    #                                ]))
+    #
+    # dict_users = mnist_iid(dataset_train, num_user)
 
     # np.save('../simulation/dataset_noniid_200_1000.npy', dict)
-
-
     # cs = np.load('../simulative_client_state.npy')
     # print(cs[0])
+
+    # # load cifar dataset
+    trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+    dataset_train = datasets.CIFAR10('../data/cifar', train=True, download=True, transform=trans_cifar)
+
+    dict_users = cifar_iid(dataset_train, num_user)
+
+    print(len(dict_users))
+    print(dict_users[0])
+
+
+
 
 
