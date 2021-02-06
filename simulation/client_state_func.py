@@ -68,9 +68,9 @@ def read_client_state():
 
 
 def print_valid_client_each_round():
-    valid_list = np.loadtxt('valid_list_fedcs.txt')
+    # valid_list = np.loadtxt('valid_list_fedcs.txt')
     # valid_list = np.loadtxt('valid_list_random.txt')
-    # valid_list = np.loadtxt('valid_list_ucb.txt')
+    valid_list = np.loadtxt('valid_list_ucb.txt')
     # valid_list = np.loadtxt('valid_list_linucb.txt')
     for round in range(len(valid_list)):
         total_this_round = valid_list[round]
