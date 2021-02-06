@@ -20,7 +20,7 @@ from models.test import test_img
 
 if __name__ == '__main__':
 
-    valid_list = np.loadtxt('valid_list_random.txt')
+    valid_list = np.loadtxt('valid_list_fedcs.txt')
 
     # load args
     args = args_parser()
@@ -154,8 +154,8 @@ if __name__ == '__main__':
     plt.show()
     # plt.savefig('acc_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
-    np.savetxt('res/loss_random_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
-    np.savetxt('res/acc_random_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
+    np.savetxt('res/loss_fedcs_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
+    np.savetxt('res/acc_fedcs_{}_{}_E{}_C{}_iid{}.txt'.format(args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
 
     # # testing
     # global_net.eval()
