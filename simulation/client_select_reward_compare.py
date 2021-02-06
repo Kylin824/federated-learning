@@ -131,7 +131,7 @@ if __name__ == "__main__":
         random_reward_list.append(total_random_reward)
 
         # fedcs choose 1
-        round_client_idx = np.random.choice(client_idxs, size=int(2*round_client_num), replace=False)
+        round_client_idx = np.random.choice(client_idxs, size=int(3*round_client_num), replace=False)
 
         total_fedcs_selected_num = 0
 
@@ -141,11 +141,8 @@ if __name__ == "__main__":
         for idx in round_client_idx:
 
             client_state = sim_client_state[idx]
-            cur_cq = client_state[1]
-            cur_nq = client_state[2]
-            client_datasize = client_state[6]
-            next_cq = client_state[8]
-            next_nq = client_state[9]
+            cur_cq = client_state[5]
+            cur_nq = client_state[6]
 
             # 只选状态最好的那些
             if cur_cq + cur_nq >= 1.0 and total_fedcs_selected_num < 10:
@@ -306,7 +303,8 @@ if __name__ == "__main__":
         cur_nq = client_state[6]
         next_cq = client_state[3]
         next_nq = client_state[4]
-        if cur_cq + cur_nq + next_cq + next_nq >= 2:
+        # if cur_cq + cur_nq + next_cq + next_nq >= 2:
+        if cur_cq + cur_nq >= 1 and next_cq + next_nq >= 1:
             valid_client_idx.append(1)
         else:
             valid_client_idx.append(0)
@@ -333,6 +331,6 @@ if __name__ == "__main__":
 
     # 保存历史选择
     # np.savetxt('valid_list_random.txt', random_chosen_valid_list)
-    # np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
+    np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
     # np.savetxt('valid_list_ucb.txt', ucb_chosen_valid_list)
     # np.savetxt('valid_list_linucb.txt', linucb_chosen_valid_list)

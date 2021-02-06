@@ -62,14 +62,14 @@ def read_client_state():
     client_state = np.load('simulative_client_state.npy')
     i = 0
     for s in client_state:
-        print("idx: %2d, poi: %d, %d, %d, real: %.3f, %.3f, cur: %.3f, %.3f, pred: %.3f, %.3f, size: %d" % (
+        print("idx: %2d,  poi:[ next %d, cur %d, pred %d ], next: %.3f, %.3f, cur: %.3f, %.3f, pred: %.3f, %.3f, size: %d" % (
         i, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9] * 1000))
         i += 1
 
 
 def print_valid_client_each_round():
-    # valid_list = np.loadtxt('valid_list_fedcs.txt')
-    valid_list = np.loadtxt('valid_list_random.txt')
+    valid_list = np.loadtxt('valid_list_fedcs.txt')
+    # valid_list = np.loadtxt('valid_list_random.txt')
     # valid_list = np.loadtxt('valid_list_ucb.txt')
     # valid_list = np.loadtxt('valid_list_linucb.txt')
     for round in range(len(valid_list)):
@@ -79,5 +79,5 @@ def print_valid_client_each_round():
 
 
 if __name__ == "__main__":
-    # print_valid_client_each_round()
-    read_client_state()
+    print_valid_client_each_round()
+    # read_client_state()
