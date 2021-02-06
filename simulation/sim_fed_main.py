@@ -15,6 +15,9 @@ from models.Fed import FedAvg
 from models.test import test_img
 
 
+# mnist noniid:  --dataset mnist --num_channels 1 --model cnn --epochs 200 --gpu 0
+# cifar iid: --dataset cifar --iid --num_channels 3 --model cnn --epochs 50 --gpu 0
+
 if __name__ == '__main__':
 
     valid_list = np.loadtxt('valid_list_random.txt')
