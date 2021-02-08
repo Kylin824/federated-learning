@@ -202,9 +202,9 @@ if __name__ == "__main__":
                 upper_bound_probs = [ucb_estimated_rewards[item] + ucb_calculate_delta(round * round_client_num + i, ucb_chosen_count, item) for item in
                                      round_client_idx]
 
-                chosen_client_arm = ucb_choose_arm(upper_bound_probs)
+                chosen_client_arm = ucb_choose_arm(upper_bound_probs) # 0-10
 
-                chosen_client_arm = round_client_idx[chosen_client_arm]
+                chosen_client_arm = round_client_idx[chosen_client_arm] # real idx
 
                 reward = calculate_reward(sim_client_state, chosen_client_arm)
 
@@ -356,7 +356,7 @@ if __name__ == "__main__":
 
 
     # 保存历史选择
-    np.savetxt('valid_list_random.txt', random_chosen_valid_list)
-    np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
-    np.savetxt('valid_list_ucb.txt', ucb_chosen_valid_list)
-    np.savetxt('valid_list_linucb.txt', linucb_chosen_valid_list)
+    # np.savetxt('valid_list_random.txt', random_chosen_valid_list)
+    # np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
+    # np.savetxt('valid_list_ucb.txt', ucb_chosen_valid_list)
+    # np.savetxt('valid_list_linucb.txt', linucb_chosen_valid_list)
