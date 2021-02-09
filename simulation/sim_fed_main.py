@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     result_str = 'linucb'
 
-    valid_list = np.loadtxt('noniid_valid/valid_list_linucb.txt')
+    valid_list = np.loadtxt('iid_valid/valid_list_linucb.txt')
 
     # load args
     args = args_parser()
@@ -156,8 +156,8 @@ if __name__ == '__main__':
     plt.show()
     # plt.savefig('acc_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
-    np.savetxt('res/mnist_noniid_main0.8_other5/loss_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
-    np.savetxt('res/mnist_noniid_main0.8_other5/acc_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
+    np.savetxt('res/mnist_iid/loss_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
+    np.savetxt('res/mnist_iid/acc_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
 
     # # testing
     # global_net.eval()
