@@ -35,7 +35,10 @@ def linucb_init(num_features, num_arms):
 
 def calculate_reward(sim_client_state, client_idx):
 
-    beta = 0.8
+
+    # beta = 0.4  # best non-iid 200-1000 setting
+
+    beta = 0  # iid 600 setting
 
     client_state = sim_client_state[client_idx]
     cur_cq = client_state[5]
@@ -45,11 +48,12 @@ def calculate_reward(sim_client_state, client_idx):
     next_nq = client_state[4]
 
     reward = 0
+
     if cur_cq + cur_nq + next_cq + next_nq >= 2:
-        # reward = client_datasize
-        reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * beta
+        reward = cur_cq + cur_nq + next_cq + next_nq - 1 + client_datasize * beta
     # else:
-    #     reward = -0.5
+    #     reward = -0.1
+
     return reward
 
 
@@ -130,7 +134,7 @@ if __name__ == "__main__":
         random_reward_list.append(total_random_reward)
 
         # fedcs choose 1
-        round_client_idx = np.random.choice(client_idxs, size=int(2*round_client_num), replace=False)
+        round_client_idx = np.random.choice(client_idxs, size=int(2.5*round_client_num), replace=False)
 
         total_fedcs_selected_num = 0
 
@@ -228,7 +232,7 @@ if __name__ == "__main__":
         ucb_reward_list.append(total_ucb_reward)
 
         # linucb choose
-        alpha = 0.5
+        alpha = 1
 
         if round == 0:
             for a in range(100):
