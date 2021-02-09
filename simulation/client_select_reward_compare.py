@@ -35,7 +35,7 @@ def linucb_init(num_features, num_arms):
 
 def calculate_reward(sim_client_state, client_idx):
 
-    beta = 0.5
+    beta = 0.8
 
     client_state = sim_client_state[client_idx]
     cur_cq = client_state[5]
@@ -45,12 +45,11 @@ def calculate_reward(sim_client_state, client_idx):
     next_nq = client_state[4]
 
     reward = 0
-    # if cur_cq + cur_nq + next_cq + next_nq >= 2:
-    if cur_cq + cur_nq >= 1 and next_cq + next_nq >= 1:
+    if cur_cq + cur_nq + next_cq + next_nq >= 2:
         # reward = client_datasize
         reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * beta
-    else:
-        reward = -0.05
+    # else:
+    #     reward = -0.5
     return reward
 
 
@@ -60,7 +59,7 @@ if __name__ == "__main__":
 
     client_feature_num = 5
 
-    np.random.seed(24)
+    np.random.seed(0)
 
     client_arm_num = 100
 
@@ -165,68 +164,68 @@ if __name__ == "__main__":
 
         # ucb choose
 
-        # ucb init  前十轮 每个都选一次
-        if round < 10:
-            round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-            valid_count = 0
+        # # ucb init  前十轮 每个都选一次
+        # if round < 10:
+        #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+        #     valid_count = 0
+        #
+        #     for idx in range(round * 10, round * 10 + 10):
+        #         reward = calculate_reward(sim_client_state, idx)
+        #
+        #         if reward > 0:
+        #             ucb_total_valid += 1
+        #             round_valid_client_idx[valid_count] = idx
+        #             valid_count += 1
+        #
+        #         total_ucb_reward += reward
+        #         ucb_estimated_rewards[idx] = reward
+        #
+        #         ucb_chosen_count[idx] += 1
+        #
+        #     ucb_chosen_valid_list.append(round_valid_client_idx)
+        #     ucb_reward_list.append(total_ucb_reward)
+        #
+        # else:
 
-            for idx in range(round * 10, round * 10 + 10):
-                reward = calculate_reward(sim_client_state, idx)
+        round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+        valid_count = 0
 
-                if reward > 0:
-                    ucb_total_valid += 1
-                    round_valid_client_idx[valid_count] = idx
-                    valid_count += 1
+        ucb_client_idxs = client_idxs
 
-                total_ucb_reward += reward
-                ucb_estimated_rewards[idx] = reward
+        round_client_idx = []
 
-                ucb_chosen_count[idx] += 1
+        for i in range(round_client_num):
 
-            ucb_chosen_valid_list.append(round_valid_client_idx)
-            ucb_reward_list.append(total_ucb_reward)
+            round_client_idx = np.random.choice(ucb_client_idxs, size=round_client_num, replace=False)
 
-        else:
+            upper_bound_probs = [ucb_estimated_rewards[item] + ucb_calculate_delta(round * round_client_num + i, ucb_chosen_count, item) for item in
+                                 round_client_idx]
 
-            round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-            valid_count = 0
+            chosen_client_arm = ucb_choose_arm(upper_bound_probs) # 0-10
 
-            ucb_client_idxs = client_idxs
+            chosen_client_arm = round_client_idx[chosen_client_arm] # real idx
 
-            round_client_idx = []
+            reward = calculate_reward(sim_client_state, chosen_client_arm)
 
-            for i in range(round_client_num):
+            if reward > 0:
+                ucb_total_valid += 1
+                round_valid_client_idx[valid_count] = chosen_client_arm
+                valid_count += 1
 
-                round_client_idx = np.random.choice(ucb_client_idxs, size=round_client_num, replace=False)
+            total_ucb_reward += reward
 
-                upper_bound_probs = [ucb_estimated_rewards[item] + ucb_calculate_delta(round * round_client_num + i, ucb_chosen_count, item) for item in
-                                     round_client_idx]
+            ucb_estimated_rewards[chosen_client_arm] = (ucb_chosen_count[chosen_client_arm] * ucb_estimated_rewards[chosen_client_arm] + reward) / (
+                    ucb_chosen_count[chosen_client_arm] + 1)
 
-                chosen_client_arm = ucb_choose_arm(upper_bound_probs) # 0-10
+            ucb_chosen_count[chosen_client_arm] += 1
 
-                chosen_client_arm = round_client_idx[chosen_client_arm] # real idx
-
-                reward = calculate_reward(sim_client_state, chosen_client_arm)
-
-                if reward > 0:
-                    ucb_total_valid += 1
-                    round_valid_client_idx[valid_count] = chosen_client_arm
-                    valid_count += 1
-
-                total_ucb_reward += reward
-
-                ucb_estimated_rewards[chosen_client_arm] = (ucb_chosen_count[chosen_client_arm] * ucb_estimated_rewards[chosen_client_arm] + reward) / (
-                        ucb_chosen_count[chosen_client_arm] + 1)
-
-                ucb_chosen_count[chosen_client_arm] += 1
-
-                # 本轮选过的不再参与选择
-                ucb_client_idxs = np.delete(ucb_client_idxs, np.where(ucb_client_idxs == chosen_client_arm))
+            # 本轮选过的不再参与选择
+            ucb_client_idxs = np.delete(ucb_client_idxs, np.where(ucb_client_idxs == chosen_client_arm))
 
 
-            ucb_chosen_valid_list.append(round_valid_client_idx)
+        ucb_chosen_valid_list.append(round_valid_client_idx)
 
-            ucb_reward_list.append(total_ucb_reward)
+        ucb_reward_list.append(total_ucb_reward)
 
         # linucb choose
         alpha = 0.5
@@ -356,7 +355,7 @@ if __name__ == "__main__":
 
 
     # 保存历史选择
-    # np.savetxt('valid_list_random.txt', random_chosen_valid_list)
-    # np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
-    # np.savetxt('valid_list_ucb.txt', ucb_chosen_valid_list)
-    # np.savetxt('valid_list_linucb.txt', linucb_chosen_valid_list)
+    np.savetxt('valid_list_random.txt', random_chosen_valid_list)
+    np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
+    np.savetxt('valid_list_ucb.txt', ucb_chosen_valid_list)
+    np.savetxt('valid_list_linucb.txt', linucb_chosen_valid_list)

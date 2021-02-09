@@ -73,8 +73,6 @@ def create_client_state():
 
         reward = 0
         if cur_cq + cur_nq + next_cq + next_nq >= 2:
-        # if cur_cq + cur_nq >= 1 and next_cq + next_nq >= 1:
-            # reward = client_datasize
             reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * beta
             print('valid: ', idx)
             total_valid_num += 1
@@ -84,7 +82,7 @@ def create_client_state():
 
     print('total valid num: ', total_valid_num)
 
-    np.save('simulative_client_state.npy', client_state_list)
+    # np.save('simulative_client_state.npy', client_state_list)
 
 
 def create_real_client_state():
@@ -102,17 +100,26 @@ def create_real_client_state():
 def read_client_state():
     client_state = np.load('simulative_client_state.npy')
     i = 0
+    valid = 0
     for s in client_state:
         print("idx: %2d,  poi:[ next %d, cur %d, pred %d ], next: %.3f, %.3f, cur: %.3f, %.3f, pred: %.3f, %.3f, size: %d" % (
         i, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9] * 1000))
         i += 1
+        cur_cq = s[5]
+        cur_nq = s[6]
+        next_cq = s[3]
+        next_nq = s[4]
+        if cur_cq + cur_nq + next_cq + next_nq >= 2:
+            valid += 1
+
+    print('total valid num: ', valid)
 
 
 def print_valid_client_each_round():
     # valid_list = np.loadtxt('valid_list_fedcs.txt')
     # valid_list = np.loadtxt('valid_list_random.txt')
-    # valid_list = np.loadtxt('valid_list_ucb.txt')
-    valid_list = np.loadtxt('valid_list_linucb.txt')
+    valid_list = np.loadtxt('valid_list_ucb.txt')
+    # valid_list = np.loadtxt('valid_list_linucb.txt')
     for round in range(len(valid_list)):
         total_this_round = valid_list[round]
         valid_this_round = total_this_round[np.where(total_this_round != -1)]
@@ -120,7 +127,7 @@ def print_valid_client_each_round():
 
 
 if __name__ == "__main__":
-    # print_valid_client_each_round()
+    print_valid_client_each_round()
     # read_client_state()
-    create_client_state()
+    # create_client_state()
     # create_real_client_state()
