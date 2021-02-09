@@ -100,19 +100,27 @@ def mnist_noniid_modified(dataset, num_users, min_train = 200, max_train = 1000,
 
         # other label idx array
         other_label_dict = np.zeros(other_label_size, dtype='int64')
+
+        other_nine_label = np.delete(np.arange(10), main_label)
+
+        other_label_class_num = 5
+
+        other_label_class = np.random.choice(other_nine_label, size=other_label_class_num, replace=False)
+
+        count = 0
+
         for j in range(other_label_size):
-            label = np.random.randint(0, 10)
-            if label == main_label:
-                label = np.random.randint(0, 10)
+            label = other_label_class[count % other_label_class_num]
             other_label_dict[j] = idxs[int(np.random.randint(0, num_imgs) + label * num_imgs)]
+            count += 1
 
         dict_users[i] = np.concatenate((dict_users[i], other_label_dict), axis=0)
 
-        # for k in range(datasize):
-        #     idx = dict_users[i][k]
-        #     print("idx: %d, label: %d" %(dict_users[i][k], labels[idx]))
+        for k in range(datasize):
+            idx = dict_users[i][k]
+            print("idx: %d, label: %d" %(dict_users[i][k], labels[idx]))
 
-        # print("++++++++++++++++++++++++++++++++++++++")
+        print("++++++++++++++++++++++++++++++++++++++")
 
     return dict_users
 
@@ -136,26 +144,26 @@ if __name__ == '__main__':
 
     num_user = 100
 
-    # dataset_train = datasets.MNIST('../data/mnist/', train=True, download=False,
-    #                                transform=transforms.Compose([
-    #                                    transforms.ToTensor(),
-    #                                    transforms.Normalize((0.1307,), (0.3081,))
-    #                                ]))
-    #
-    # dict_users = mnist_iid(dataset_train, num_user)
+    dataset_train = datasets.MNIST('../data/mnist/', train=True, download=False,
+                                   transform=transforms.Compose([
+                                       transforms.ToTensor(),
+                                       transforms.Normalize((0.1307,), (0.3081,))
+                                   ]))
+
+    dict_users = mnist_noniid_modified(dataset_train, num_user)
 
     # np.save('../simulation/dataset_noniid_200_1000.npy', dict)
     # cs = np.load('../simulative_client_state.npy')
     # print(cs[0])
 
-    # # load cifar dataset
-    trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    dataset_train = datasets.CIFAR10('../data/cifar', train=True, download=True, transform=trans_cifar)
-
-    dict_users = cifar_iid(dataset_train, num_user)
+    # # # load cifar dataset
+    # trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+    # dataset_train = datasets.CIFAR10('../data/cifar', train=True, download=True, transform=trans_cifar)
+    #
+    # dict_users = cifar_iid(dataset_train, num_user)
 
     print(len(dict_users))
-    print(dict_users[0])
+    # print(dict_users[0])
 
 
 

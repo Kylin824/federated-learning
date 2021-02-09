@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# acc_random = np.loadtxt('res/noniid_prob_0.8/acc_random_mnist_cnn_E200_C0.1_iidFalse.txt')
-# acc_fedcs = np.loadtxt('res/noniid_prob_0.8/acc_fedcs_mnist_cnn_E200_C0.1_iidFalse.txt')
-# acc_ucb = np.loadtxt('res/noniid_prob_0.8/acc_ucb_mnist_cnn_E200_C0.1_iidFalse.txt')
-# acc_linucb = np.loadtxt('res/noniid_prob_0.8/acc_linucb_mnist_cnn_E200_C0.1_iidFalse.txt')
+# acc_random = np.loadtxt('res/mnist_noniid_main0.8_other5/acc_random_mnist_cnn_E200_C0.1_iidFalse.txt')
+# acc_fedcs = np.loadtxt('res/mnist_noniid_main0.8_other5/acc_fedcs_mnist_cnn_E200_C0.1_iidFalse.txt')
+# acc_ucb = np.loadtxt('res/mnist_noniid_main0.8_other5/acc_ucb_mnist_cnn_E200_C0.1_iidFalse.txt')
+# acc_linucb = np.loadtxt('res/mnist_noniid_main0.8_other5/acc_linucb_mnist_cnn_E200_C0.1_iidFalse.txt')
 
 acc_random = np.loadtxt('res/noniid_prob_0.9/acc_random_mnist_cnn_E50_C0.1_iidFalse.txt')
 acc_fedcs = np.loadtxt('res/noniid_prob_0.9/acc_fedcs_mnist_cnn_E50_C0.1_iidFalse.txt')
