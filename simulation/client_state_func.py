@@ -9,8 +9,8 @@ def create_client_state():
     client_dataset = np.load("dataset_noniid_200_1000.npy", allow_pickle=True)
     client_dataset = client_dataset.item()
 
-    poi_cu_prob = [0.5, 0.5, 0.4, 0.5, 0.4, 0.4, 0.4, 0.4]
-    poi_cq_prob = [0.5, 0.4, 0.6, 0.5, 0.6, 0.6, 0.6, 0.6]
+    poi_cu_prob = [0.45, 0.5, 0.4, 0.45, 0.4, 0.4, 0.4, 0.4]
+    poi_cq_prob = [0.45, 0.4, 0.6, 0.45, 0.5, 0.5, 0.6, 0.6]
 
     # 8个poi, 0和3分别20个, 其他各10个
     #  0-20 : 0
@@ -82,7 +82,7 @@ def create_client_state():
 
     print('total valid num: ', total_valid_num)
 
-    # np.save('simulative_client_state.npy', client_state_list)
+    np.save('simulative_client_state.npy', client_state_list)
 
 
 def create_real_client_state():
@@ -127,7 +127,7 @@ def print_valid_client_each_round():
 
 
 if __name__ == "__main__":
-    print_valid_client_each_round()
+    # print_valid_client_each_round()
     # read_client_state()
-    # create_client_state()
+    create_client_state()
     # create_real_client_state()
