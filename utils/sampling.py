@@ -53,7 +53,7 @@ def mnist_noniid(dataset, num_users):
     return dict_users
 
 
-def mnist_noniid_modified(dataset, num_users, min_train = 200, max_train = 1000, main_label_prop = 0.8):
+def mnist_noniid_modified(dataset, num_users, min_train = 200, max_train = 1000, main_label_prop = 0.8, other = 5):
     """
     non-i.i.d数据生成
 
@@ -103,24 +103,23 @@ def mnist_noniid_modified(dataset, num_users, min_train = 200, max_train = 1000,
 
         other_nine_label = np.delete(np.arange(10), main_label)
 
-        other_label_class_num = 5
 
-        other_label_class = np.random.choice(other_nine_label, size=other_label_class_num, replace=False)
+        other_label_class = np.random.choice(other_nine_label, size=other, replace=False)
 
         count = 0
 
         for j in range(other_label_size):
-            label = other_label_class[count % other_label_class_num]
+            label = other_label_class[count % other]
             other_label_dict[j] = idxs[int(np.random.randint(0, num_imgs) + label * num_imgs)]
             count += 1
 
         dict_users[i] = np.concatenate((dict_users[i], other_label_dict), axis=0)
 
-        for k in range(datasize):
-            idx = dict_users[i][k]
-            print("idx: %d, label: %d" %(dict_users[i][k], labels[idx]))
-
-        print("++++++++++++++++++++++++++++++++++++++")
+        # for k in range(datasize):
+        #     idx = dict_users[i][k]
+        #     print("idx: %d, label: %d" %(dict_users[i][k], labels[idx]))
+        #
+        # print("++++++++++++++++++++++++++++++++++++++")
 
     return dict_users
 

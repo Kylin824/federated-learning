@@ -20,9 +20,9 @@ from models.test import test_img
 
 if __name__ == '__main__':
 
-    result_str = 'linucb'
+    result_str = 'fedcs'
 
-    valid_list = np.loadtxt('iid_valid/valid_list_linucb.txt')
+    valid_list = np.loadtxt('noniid_valid/valid_list_fedcs.txt')
 
     # load args
     args = args_parser()
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             dict_users = mnist_iid(dataset_train, args.num_users)
         else:
             # dict_users = mnist_noniid(dataset_train, args.num_users)
-            dict_users = mnist_noniid_modified(dataset_train, args.num_users, main_label_prop=0.8)
+            dict_users = mnist_noniid_modified(dataset_train, args.num_users, main_label_prop=0.8, other=9)
     elif args.dataset == 'cifar':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         dataset_train = datasets.CIFAR10('../data/cifar', train=True, download=True, transform=trans_cifar)
@@ -156,8 +156,8 @@ if __name__ == '__main__':
     plt.show()
     # plt.savefig('acc_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
-    np.savetxt('res/cifar_iid/loss_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
-    np.savetxt('res/cifar_iid/acc_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
+    np.savetxt('res/mnist_noniid_main0.8_other9/loss_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
+    np.savetxt('res/mnist_noniid_main0.8_other9/acc_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
 
     # # testing
     # global_net.eval()
