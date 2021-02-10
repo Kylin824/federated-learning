@@ -20,9 +20,10 @@ from models.test import test_img
 
 if __name__ == '__main__':
 
-    result_str = 'fedcs'
+    result_str = 'linucb'
 
-    valid_list = np.loadtxt('noniid_valid/valid_list_fedcs.txt')
+    # valid_list = np.loadtxt('noniid_valid/valid_list_fedcs.txt')
+    valid_list = np.loadtxt('valid_list_linucb.txt')
 
     # load args
     args = args_parser()
