@@ -7,10 +7,10 @@ from torchvision import datasets, transforms
 import torch
 import time
 
-from utils.sampling import mnist_iid, cifar_iid, mnist_noniid, mnist_noniid_modified
+from utils.sampling import mnist_iid, cifar_iid, mnist_noniid, mnist_noniid_modified, cifar_noniid
 from utils.options import args_parser
 from models.Update import LocalUpdate
-from models.Nets import MLP, CNNMnist, CNNCifar
+from models.Nets import MLP, CNNMnist, CNNCifar, CNNCifarPlus
 from models.Fed import FedAvg
 from models.test import test_img
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         if args.iid:
             dict_users = cifar_iid(dataset_train, args.num_users)
         else:
-            exit('Error: only consider IID setting in CIFAR10')
+            dict_users = cifar_noniid(dataset_train, args.num_users, main_label_prop=0.8, other=9)
     else:
         exit('Error: unrecognized dataset')
 
@@ -57,7 +57,8 @@ if __name__ == '__main__':
 
     # build model
     if args.model == 'cnn' and args.dataset == 'cifar':
-        global_net = CNNCifar(args=args).to(args.device)
+        # global_net = CNNCifar(args=args).to(args.device)
+        global_net = CNNCifarPlus(args=args).to(args.device)
     elif args.model == 'cnn' and args.dataset == 'mnist':
         global_net = CNNMnist(args=args).to(args.device)
     elif args.model == 'mlp':
