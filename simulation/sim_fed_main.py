@@ -20,10 +20,10 @@ from models.test import test_img
 
 if __name__ == '__main__':
 
-    result_str = 'linucb'
+    result_str = 'random'
 
     # valid_list = np.loadtxt('noniid_valid/valid_list_fedcs.txt')
-    valid_list = np.loadtxt('valid_list_linucb.txt')
+    valid_list = np.loadtxt('valid_list_random.txt')
 
     # load args
     args = args_parser()
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         if args.iid:
             dict_users = cifar_iid(dataset_train, args.num_users)
         else:
-            dict_users = cifar_noniid(dataset_train, args.num_users, main_label_prop=0.8, other=9)
+            dict_users = cifar_noniid(dataset_train, args.num_users, main_label_prop=0.1, other=9)
     else:
         exit('Error: unrecognized dataset')
 
@@ -98,8 +98,11 @@ if __name__ == '__main__':
             w_locals = []
 
         round_idx = valid_list[round]
-
         user_idx_this_round = round_idx[np.where(round_idx != -1)]
+
+        # 随机
+        # user_idx_this_round = np.random.choice(range(args.num_users), 10, replace=False)  # 在num_users里面选m个
+
 
         if len(user_idx_this_round) > 0:
 
@@ -158,8 +161,8 @@ if __name__ == '__main__':
     plt.show()
     # plt.savefig('acc_random_{}_{}_E{}_C{}_iid{}.png'.format(args.dataset, args.model, args.epochs, args.frac, args.iid))
 
-    np.savetxt('res/mnist_iid/loss_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
-    np.savetxt('res/mnist_iid/acc_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
+    np.savetxt('res/cifar_noniid/loss_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), loss_avg_client)
+    np.savetxt('res/cifar_noniid/acc_{}_{}_{}_E{}_C{}_iid_{}.txt'.format(result_str, args.dataset, args.model, args.epochs, args.frac, args.iid), acc_global_model)
 
     # # testing
     # global_net.eval()
