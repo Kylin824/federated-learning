@@ -51,6 +51,7 @@ def calculate_reward(sim_client_state, client_idx):
 
     if cur_cq + cur_nq + next_cq + next_nq >= 2:
         reward = cur_cq + cur_nq + next_cq + next_nq - 1 + client_datasize * beta
+        # reward = 1
     # else:
     #     reward = -0.1
 
@@ -359,7 +360,7 @@ if __name__ == "__main__":
 
 
     # 保存历史选择
-    np.savetxt('valid_list_random.txt', random_chosen_valid_list)
-    np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
-    np.savetxt('valid_list_ucb.txt', ucb_chosen_valid_list)
-    np.savetxt('valid_list_linucb.txt', linucb_chosen_valid_list)
+    # np.savetxt('valid_list_random.txt', random_chosen_valid_list)
+    # np.savetxt('valid_list_fedcs.txt', fedcs_chosen_valid_list)
+    # np.savetxt('valid_list_ucb.txt', ucb_chosen_valid_list)
+    # np.savetxt('valid_list_linucb.txt', linucb_chosen_valid_list)
