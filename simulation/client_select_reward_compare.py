@@ -294,6 +294,14 @@ if __name__ == "__main__":
         linucb_reward_list.append(total_linucb_reward)
 
 
+        if round % 50 == 0:
+            print("\nRound: ", round)
+            print("total random valid", random_total_valid)
+            print("total fedcs valid", fedcs_total_valid)
+            print("total ucb valid", ucb_total_valid)
+            print("total linucb valid", linucb_total_valid)
+
+
     print("total_random_reward: ", total_random_reward)
     print("total_fedcs_reward: ", total_fedcs_reward)
     print("total_ucb_reward: ", total_ucb_reward)
