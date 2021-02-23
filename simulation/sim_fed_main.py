@@ -20,10 +20,10 @@ from models.test import test_img
 
 if __name__ == '__main__':
 
-    result_str = 'random'
+    result_str = 'linucb'
 
     # valid_list = np.loadtxt('noniid_valid/valid_list_fedcs.txt')
-    valid_list = np.loadtxt('valid_list_random.txt')
+    valid_list = np.loadtxt('valid_list_linucb.txt')
 
     # load args
     args = args_parser()
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         if args.iid:
             dict_users = cifar_iid(dataset_train, args.num_users)
         else:
-            dict_users = cifar_noniid(dataset_train, args.num_users, main_label_prop=0.1, other=9)
+            dict_users = cifar_noniid(dataset_train, args.num_users, min_train=200, max_train=1000, main_label_prop=0.8, other=9)
     else:
         exit('Error: unrecognized dataset')
 
