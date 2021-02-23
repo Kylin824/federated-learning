@@ -4,9 +4,9 @@ import numpy as np
 
 
 def subplot_fedcs(length, interval):
-    f1_path = '../simulation/res/cifar_iid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
-    f2_path = '../simulation/res/cifar_iid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
-    f3_path = '../simulation/res/cifar_iid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
+    f1_path = '../simulation/res/cifar_iid/adam/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
+    f2_path = '../simulation/res/cifar_iid/adam/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
+    f3_path = '../simulation/res/cifar_iid/adam/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
 
     # f1
     data = np.loadtxt(f1_path)
@@ -32,9 +32,9 @@ def subplot_fedcs(length, interval):
     return acc_min, acc_max, acc_mean
 
 def subplot_fedavg(length, interval):
-    f1_path = '../simulation/res/cifar_iid/acc_random_cifar_cnn_E200_C0.1_iid_True.txt'
-    f2_path = '../simulation/res/cifar_iid/acc_random_cifar_cnn_E200_C0.1_iid_True.txt'
-    f3_path = '../simulation/res/cifar_iid/acc_random_cifar_cnn_E200_C0.1_iid_True.txt'
+    f1_path = '../simulation/res/cifar_iid/adam/acc_random_cifar_cnn_E200_C0.1_iid_True.txt'
+    f2_path = '../simulation/res/cifar_iid/adam/acc_random_cifar_cnn_E200_C0.1_iid_True.txt'
+    f3_path = '../simulation/res/cifar_iid/adam/acc_random_cifar_cnn_E200_C0.1_iid_True.txt'
 
     # f1
     data = np.loadtxt(f1_path)
@@ -61,9 +61,9 @@ def subplot_fedavg(length, interval):
 
 
 def subplot_mab(length, interval):
-    f1_path = '../simulation/res/cifar_iid/acc_ucb_cifar_cnn_E200_C0.1_iid_True.txt'
-    f2_path = '../simulation/res/cifar_iid/acc_ucb_cifar_cnn_E200_C0.1_iid_True.txt'
-    f3_path = '../simulation/res/cifar_iid/acc_ucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f1_path = '../simulation/res/cifar_iid/adam/acc_ucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f2_path = '../simulation/res/cifar_iid/adam/acc_ucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f3_path = '../simulation/res/cifar_iid/adam/acc_ucb_cifar_cnn_E200_C0.1_iid_True.txt'
 
     data = np.loadtxt(f1_path)
     f1_acc = data
@@ -89,9 +89,9 @@ def subplot_mab(length, interval):
 
 
 def subplot_linucb(length, interval):
-    f1_path = '../simulation/res/cifar_iid/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
-    f2_path = '../simulation/res/cifar_iid/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
-    f3_path = '../simulation/res/cifar_iid/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f1_path = '../simulation/res/cifar_iid/adam/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f2_path = '../simulation/res/cifar_iid/adam/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f3_path = '../simulation/res/cifar_iid/adam/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
 
     data = np.loadtxt(f1_path)
     f1_acc = data
