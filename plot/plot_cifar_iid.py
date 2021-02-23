@@ -4,9 +4,9 @@ import numpy as np
 
 
 def subplot_fedcs(length, interval):
-    f1_path = '../simulation/res/cifar_iid/adam/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
-    f2_path = '../simulation/res/cifar_iid/adam/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
-    f3_path = '../simulation/res/cifar_iid/adam/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
+    f1_path = '../simulation/res/cifar_iid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
+    f2_path = '../simulation/res/cifar_iid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
+    f3_path = '../simulation/res/cifar_iid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt'
 
     # f1
     data = np.loadtxt(f1_path)
@@ -89,9 +89,9 @@ def subplot_mab(length, interval):
 
 
 def subplot_linucb(length, interval):
-    f1_path = '../simulation/res/cifar_iid/adam/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
-    f2_path = '../simulation/res/cifar_iid/adam/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
-    f3_path = '../simulation/res/cifar_iid/adam/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f1_path = '../simulation/res/cifar_iid/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f2_path = '../simulation/res/cifar_iid/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
+    f3_path = '../simulation/res/cifar_iid/acc_linucb_cifar_cnn_E200_C0.1_iid_True.txt'
 
     data = np.loadtxt(f1_path)
     f1_acc = data
@@ -147,13 +147,13 @@ def plot_cifar_result(interval=3):
     plt.tick_params(labelsize=18)
     leg = ax.legend(fontsize=15)  # , frameon=False)
     leg.set_draggable(True)
-    plt.title('CIFAR-10 (non-i.i.d.)', fontdict={'size': 20})
+    plt.title('CIFAR-10 (i.i.d.)', fontdict={'size': 20})
     plt.tight_layout()
     plt.show()
 
 
 if __name__ == '__main__':
-    plot_cifar_result(interval=5)
+    plot_cifar_result(interval=7)
     # data = np.loadtxt('../simulation/res/cifar_iid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt')
     # print(data[0])
 

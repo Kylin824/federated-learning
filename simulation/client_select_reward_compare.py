@@ -50,8 +50,8 @@ def calculate_reward(sim_client_state, client_idx):
     reward = 0
 
     if cur_cq + cur_nq + next_cq + next_nq >= 2:
-        reward = cur_cq + cur_nq + next_cq + next_nq - 1 + client_datasize * beta
-        # reward = 1
+        # reward = cur_cq + cur_nq + next_cq + next_nq - 1 + client_datasize * beta
+        reward = 1
     # else:
     #     reward = -0.1
 
@@ -365,6 +365,11 @@ if __name__ == "__main__":
     print("total fedcs valid", fedcs_total_valid)
     print("total ucb valid", ucb_total_valid)
     print("total linucb valid", linucb_total_valid)
+
+    # np.savetxt('random_reward_list.txt', random_reward_list)
+    # np.savetxt('fedcs_reward_list.txt', fedcs_reward_list)
+    # np.savetxt('ucb_reward_list.txt', ucb_reward_list)
+    # np.savetxt('linucb_reward_list.txt', linucb_reward_list)
 
 
     # 保存历史选择

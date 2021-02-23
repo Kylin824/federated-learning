@@ -153,7 +153,7 @@ def plot_cifar_result(interval=3):
 
 
 if __name__ == '__main__':
-    plot_cifar_result(interval=5)
+    plot_cifar_result(interval=7)
     # data = np.loadtxt('../simulation/res/cifar_iid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt')
     # print(data[0])
 
