@@ -93,8 +93,8 @@ def create_change_client_state():
     client_dataset = np.load("dataset_noniid_200_1000.npy", allow_pickle=True)
     client_dataset = client_dataset.item()
 
-    poi_cu_prob = [0.45, 0.5, 0.4, 0.45, 0.4, 0.4, 0.4, 0.4]
-    poi_cq_prob = [0.45, 0.4, 0.6, 0.45, 0.5, 0.5, 0.6, 0.6]
+    poi_cu_prob = [0.6, 0.4, 0.6, 0.6, 0.5, 0.5, 0.6, 0.6]
+    poi_cq_prob = [0.6, 0.5, 0.4, 0.6, 0.4, 0.4, 0.4, 0.4]
 
     # 8个poi, 0和3分别20个, 其他各10个
     #  0-20 : 0
@@ -146,7 +146,7 @@ def create_change_client_state():
 
     for idx in range(100):
 
-        beta = 0.5
+        # beta = 0.5
 
         client_state = client_state_list[idx]
         cur_cq = client_state[5]
@@ -157,17 +157,49 @@ def create_change_client_state():
 
         reward = 0
         if cur_cq + cur_nq + next_cq + next_nq >= 2:
-            reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * beta
+            # reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * beta
             print('valid: ', idx)
             total_valid_num += 1
         else:
-            reward = -0.05
+            # reward = -0.05
             print('fail: ', idx)
 
     print('total valid num: ', total_valid_num)
 
-    np.save('simulative_client_state.npy', client_state_list)
+    np.save('simulative__change_client_state.npy', client_state_list)
 
+def create_change_client_state_plus():
+
+    np.random.seed(2)
+
+    client_state_list = np.load('simulative_client_state.npy')
+
+    print(client_state_list[0])
+
+    for idx in range(100):
+
+        # beta = 0.5
+
+        client_state = client_state_list[idx]
+        cur_cq = client_state[5]
+        cur_nq = client_state[6]
+        client_datasize = client_state[9]
+        next_cq = client_state[3]
+        next_nq = client_state[4]
+
+        reward = 0
+        if cur_cq + cur_nq + next_cq + next_nq >= 2:
+            # reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * beta
+            client_state[6] = 2 - (cur_cq + next_cq + next_nq) - np.random.normal(loc=0.05, scale=0.1, size=1)
+            client_state[4] = 2 - (cur_cq + cur_nq + next_cq) - np.random.normal(loc=0.05, scale=0.1, size=1)
+            print('valid: ', idx)
+        else:
+            # reward = -0.05
+            client_state[6] = 2 - (cur_cq + next_cq + next_nq) + np.random.normal(loc=0.05, scale=0.1, size=1)
+            client_state[4] = 2 - (cur_cq + cur_nq + next_cq) + np.random.normal(loc=0.05, scale=0.1, size=1)
+            print('fail: ', idx)
+
+    np.save('simulative__change_client_state.npy', client_state_list)
 
 def create_real_client_state():
     real_poi = np.loadtxt('../realenv/real_poi_pred.txt')
@@ -213,5 +245,7 @@ def print_valid_client_each_round():
 if __name__ == "__main__":
     # print_valid_client_each_round()
     # read_client_state()
-    create_client_state()
+    # create_client_state()
     # create_real_client_state()
+    # create_change_client_state()
+    create_change_client_state_plus()
