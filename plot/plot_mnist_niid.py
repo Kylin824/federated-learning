@@ -4,9 +4,9 @@ import numpy as np
 
 
 def subplot_fedcs(length, interval):
-    f1_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_fedcs_mnist_cnn_E200_C0.1_iid_False.txt'
-    f2_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_fedcs_mnist_cnn_E200_C0.1_iid_False.txt'
-    f3_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_fedcs_mnist_cnn_E200_C0.1_iid_False.txt'
+    f1_path = '../simulation/res/mnist_noniid/acc_fedcs_mnist_cnn_E200_C0.1_iid_False.txt'
+    f2_path = '../simulation/res/mnist_noniid/acc_fedcs_mnist_cnn_E200_C0.1_iid_False.txt'
+    f3_path = '../simulation/res/mnist_noniid/acc_fedcs_mnist_cnn_E200_C0.1_iid_False.txt'
 
     # f1
     data = np.loadtxt(f1_path)
@@ -32,9 +32,9 @@ def subplot_fedcs(length, interval):
     return acc_min, acc_max, acc_mean
 
 def subplot_fedavg(length, interval):
-    f1_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_random_mnist_cnn_E200_C0.1_iid_False.txt'
-    f2_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_random_mnist_cnn_E200_C0.1_iid_False.txt'
-    f3_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_random_mnist_cnn_E200_C0.1_iid_False.txt'
+    f1_path = '../simulation/res/mnist_noniid/acc_random_mnist_cnn_E200_C0.1_iid_False.txt'
+    f2_path = '../simulation/res/mnist_noniid/acc_random_mnist_cnn_E200_C0.1_iid_False.txt'
+    f3_path = '../simulation/res/mnist_noniid/acc_random_mnist_cnn_E200_C0.1_iid_False.txt'
 
     # f1
     data = np.loadtxt(f1_path)
@@ -61,9 +61,9 @@ def subplot_fedavg(length, interval):
 
 
 def subplot_mab(length, interval):
-    f1_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_ucb_mnist_cnn_E200_C0.1_iid_False.txt'
-    f2_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_ucb_mnist_cnn_E200_C0.1_iid_False.txt'
-    f3_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_ucb_mnist_cnn_E200_C0.1_iid_False.txt'
+    f1_path = '../simulation/res/mnist_noniid/acc_ucb_mnist_cnn_E200_C0.1_iid_False.txt'
+    f2_path = '../simulation/res/mnist_noniid/acc_ucb_mnist_cnn_E200_C0.1_iid_False.txt'
+    f3_path = '../simulation/res/mnist_noniid/acc_ucb_mnist_cnn_E200_C0.1_iid_False.txt'
 
     data = np.loadtxt(f1_path)
     f1_acc = data
@@ -89,9 +89,9 @@ def subplot_mab(length, interval):
 
 
 def subplot_linucb(length, interval):
-    f1_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_linucb_mnist_cnn_E200_C0.1_iid_False.txt'
-    f2_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_linucb_mnist_cnn_E200_C0.1_iid_False.txt'
-    f3_path = '../simulation/res/mnist_noniid_main0.8_other9/acc_linucb_mnist_cnn_E200_C0.1_iid_False.txt'
+    f1_path = '../simulation/res/mnist_noniid/acc_linucb_mnist_cnn_E200_C0.1_iid_False.txt'
+    f2_path = '../simulation/res/mnist_noniid/acc_linucb_mnist_cnn_E200_C0.1_iid_False.txt'
+    f3_path = '../simulation/res/mnist_noniid/acc_linucb_mnist_cnn_E200_C0.1_iid_False.txt'
 
     data = np.loadtxt(f1_path)
     f1_acc = data
@@ -131,14 +131,14 @@ def plot_cifar_result(interval=3):
     fedcs_mean = [i / 100 for i in fedcs_mean]
 
 
-    plt.plot(x, fedavg_mean, 'o-', linewidth=1.5, color='#59a869', label='FedAvg [Google Team]')
+    plt.plot(x, fedavg_mean, '.-', linewidth=1.5, color='#1f77b4', label='FedAvg [McMahan, 2016]')
     # plt.fill_between(x, fedavg_min, fedavg_max, color='#59a869', alpha=0.25)
-    plt.plot(x, linucb_mean, 'v-', linewidth=1.5, color='#d62728', label='Proposed')
-    # plt.fill_between(x, linucb_min, linucb_max, color='#d62728', alpha=0.25)
-    plt.plot(x, mab_mean, '*-', linewidth=1.5, color='#ff7f0e', label='MAB-based [Yoshida, 2020]')
-    # plt.fill_between(x, mab_min, mab_max, color='#ff7f0e', alpha=0.25)
-    plt.plot(x, fedcs_mean, '+--', linewidth=1.5, color='#1f77b4', label='FedCS [Nishio, 2019]')
+    plt.plot(x, fedcs_mean, 'd-', linewidth=1.5, color='#ff7f0e', label='FedCS [Nishio, 2019]')
     # plt.fill_between(x, fedcs_min, fedcs_max, color='#1f77b4', alpha=0.25)
+    plt.plot(x, mab_mean, '*-', linewidth=1.5, color='#2ca02c', label='MAB-based [Yoshida, 2020]')
+    # plt.fill_between(x, mab_min, mab_max, color='#ff7f0e', alpha=0.25)
+    plt.plot(x, linucb_mean, 'v-', linewidth=1.5, color='#d62728', label='cMAB-based (Proposed)')
+    # plt.fill_between(x, linucb_min, linucb_max, color='#d62728', alpha=0.25)
 
     plt.ylim(0.9, 1)
 
@@ -155,8 +155,8 @@ def plot_cifar_result(interval=3):
 
 
 if __name__ == '__main__':
-    plot_cifar_result(interval=8)
-    # data = np.loadtxt('../simulation/res/mnist_noniid_main0.8_other9/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt')
+    plot_cifar_result(interval=7)
+    # data = np.loadtxt('../simulation/res/mnist_noniid/acc_fedcs_cifar_cnn_E200_C0.1_iid_True.txt')
     # print(data[0])
 
 

@@ -20,20 +20,21 @@ x = range(len(label_list))
 
 fig, ax = plt.subplots()
 
-rects1 = plt.bar(x, height=fedavg_list/fedavg_choose_list, width=0.15, color='#2ca02c', label="FedAvg [Google Team]",
-hatch='.')
-rects2 = plt.bar([i + 0.15 for i in x], height=fedcs_list/fedcs_choose_list, color='#1f77b4', width=0.15, label="FedCS [Nishio, 2019]",
-hatch='xx')
-rects3 = plt.bar([i + 0.3 for i in x], height=mab_list / mab_choose_list, color='#ff7f0e', width=0.15, label="MAB-based [Yoshida, 2020]",
-                 hatch='')
-rects4 = plt.bar([i + 0.45 for i in x], height=linucb_list / linucb_choose_list, color='#d62728', width=0.15,
-                 label="Proposed", hatch='\\')
-rects5 = plt.bar([i + 0.6 for i in x], height=optimal_list / optimal_choose_list, color='#6e0098', width=0.15,
-                 label="Optimal", hatch='o')
+rects5 = plt.bar([i + 0.6 for i in x], height=optimal_list / optimal_choose_list, color='#9467bd', width=0.15, label="Optimal", hatch='\\')
+rects4 = plt.bar([i + 0.45 for i in x], height=linucb_list / linucb_choose_list, color='#d62728', width=0.15, label="cMAB-based (Proposed)", hatch='x')
+rects3 = plt.bar([i + 0.3 for i in x], height=mab_list / mab_choose_list, color='#2ca02c', width=0.15, label="MAB-based [Yoshida, 2020]", hatch='')
+rects2 = plt.bar([i + 0.15 for i in x], height=fedcs_list/fedcs_choose_list, color='#ff7f0e', width=0.15, label="FedCS [Nishio, 2019]", hatch='/')
+rects1 = plt.bar(x, height=fedavg_list/fedavg_choose_list, width=0.15, color='#1f77b4', label="FedAvg [McMahan, 2016]", hatch='.')
+
+# rects1 = plt.bar(x, height=fedavg_list/fedavg_choose_list, width=0.15, color='#1f77b4', label="FedAvg [Google Team]")
+# rects2 = plt.bar([i + 0.15 for i in x], height=fedcs_list/fedcs_choose_list, color='#ff7f0e', width=0.15, label="FedCS [Nishio, 2019]")
+# rects3 = plt.bar([i + 0.3 for i in x], height=mab_list / mab_choose_list, color='#2ca02c', width=0.15, label="MAB-based [Yoshida, 2020]")
+# rects4 = plt.bar([i + 0.45 for i in x], height=linucb_list / linucb_choose_list, color='#d62728', width=0.15, label="cMAB-based (Proposed)")
+# rects5 = plt.bar([i + 0.6 for i in x], height=optimal_list / optimal_choose_list, color='#9467bd', width=0.15, label="Optimal")
 
 
 plt.ylabel("Ratio of Valid Participants", fontsize=20)
-plt.ylim(0, 1.75)
+plt.ylim(0, 1.8)
 plt.yticks([0, 0.5, 1])
 
 plt.xticks([index + 0.22 for index in x], label_list)

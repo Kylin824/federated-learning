@@ -95,6 +95,7 @@ if __name__ == "__main__":
 
     # linucb attributes
     A, b, theta, p = linucb_init(client_feature_num, client_arm_num)
+    alpha = 1
     linucb_chosen_count = np.zeros(client_arm_num)
     total_linucb_reward = 0
     linucb_reward_list = []
@@ -234,8 +235,6 @@ if __name__ == "__main__":
         ucb_reward_list.append(total_ucb_reward)
 
         # linucb choose
-        alpha = 1
-
         if round == 0:
             for a in range(100):
                 linucb_client_feature.append(sim_client_state[a][5:])  # cur_cq, cur_nq, pred_cq, pred_nq, datasize
@@ -295,216 +294,432 @@ if __name__ == "__main__":
         linucb_reward_list.append(total_linucb_reward)
 
 
-        if round % 50 == 0:
-            print("\nRound: ", round)
-            print("total random valid", random_total_valid)
-            print("total fedcs valid", fedcs_total_valid)
-            print("total ucb valid", ucb_total_valid)
-            print("total linucb valid", linucb_total_valid)
+        # if round % 50 == 0:
+        #     print("\nRound: ", round)
+        #     print("total random valid", random_total_valid)
+        #     print("total fedcs valid", fedcs_total_valid)
+        #     print("total ucb valid", ucb_total_valid)
+        #     print("total linucb valid", linucb_total_valid)
+
+    print("==============================================================")
+
+    print("\nrandom chosen count: ", np.sum(random_chosen_count))
+    for i in range(100):
+        print("%3d" % int(random_chosen_count[i]), end='  ')
+
+    print("\nfedcs chosen count: ", np.sum(fedcs_chosen_count))
+    for i in range(100):
+        print("%3d" % int(fedcs_chosen_count[i]), end='  ')
+
+    print("\nucb chosen count: ", np.sum(ucb_chosen_count))
+    for i in range(100):
+        print("%3d" % int(ucb_chosen_count[i]), end='  ')
+
+    print("\nlinucb chosen count: ", np.sum(linucb_chosen_count))
+    for i in range(100):
+        print("%3d" % int(linucb_chosen_count[i]), end='  ')
+
+    print("\n==============================================================")
+
+    # for round in range(200, 400):
+    #
+    #     # random choose
+    #     round_client_idx = np.random.choice(client_idxs, size=round_client_num, replace=False)
+    #
+    #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     valid_count = 0
+    #
+    #     # get random reward
+    #     for idx in round_client_idx:
+    #
+    #         reward = calculate_reward(sim_client_state, idx)
+    #
+    #         total_random_reward += reward
+    #
+    #         if reward > 0:
+    #             random_total_valid += 1
+    #             round_valid_client_idx[valid_count] = idx
+    #             valid_count += 1
+    #
+    #
+    #         random_chosen_count[idx] += 1
+    #
+    #     # if len(round_valid_client_idx) < 10:
+    #     #     for k in range(10 - len(round_valid_client_idx)):
+    #     #         round_valid_client_idx.append(-1)
+    #
+    #     random_chosen_valid_list.append(round_valid_client_idx)
+    #
+    #     random_reward_list.append(total_random_reward)
+    #
+    #     # fedcs choose 1
+    #     round_client_idx = np.random.choice(client_idxs, size=int(2.5*round_client_num), replace=False)
+    #
+    #     total_fedcs_selected_num = 0
+    #
+    #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     valid_count = 0
+    #
+    #     for idx in round_client_idx:
+    #
+    #         client_state = sim_client_state[idx]
+    #         cur_cq = client_state[5]
+    #         cur_nq = client_state[6]
+    #
+    #         # 只选状态最好的那些
+    #         if cur_cq + cur_nq >= 1.0 and total_fedcs_selected_num < 10:
+    #
+    #             reward = calculate_reward(sim_client_state, idx)
+    #
+    #             if reward > 0:
+    #                 fedcs_total_valid += 1
+    #                 round_valid_client_idx[valid_count] = idx
+    #                 valid_count += 1
+    #
+    #             total_fedcs_selected_num += 1
+    #             fedcs_chosen_count[idx] += 1
+    #             total_fedcs_reward += reward
+    #
+    #     fedcs_chosen_valid_list.append(round_valid_client_idx)
+    #
+    #     fedcs_reward_list.append(total_fedcs_reward)
+    #
+    #
+    #     # ucb choose
+    #
+    #     # # ucb init  前十轮 每个都选一次
+    #     # if round < 10:
+    #     #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     #     valid_count = 0
+    #     #
+    #     #     for idx in range(round * 10, round * 10 + 10):
+    #     #         reward = calculate_reward(sim_client_state, idx)
+    #     #
+    #     #         if reward > 0:
+    #     #             ucb_total_valid += 1
+    #     #             round_valid_client_idx[valid_count] = idx
+    #     #             valid_count += 1
+    #     #
+    #     #         total_ucb_reward += reward
+    #     #         ucb_estimated_rewards[idx] = reward
+    #     #
+    #     #         ucb_chosen_count[idx] += 1
+    #     #
+    #     #     ucb_chosen_valid_list.append(round_valid_client_idx)
+    #     #     ucb_reward_list.append(total_ucb_reward)
+    #     #
+    #     # else:
+    #
+    #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     valid_count = 0
+    #
+    #     ucb_client_idxs = client_idxs
+    #
+    #     round_client_idx = []
+    #
+    #     for i in range(round_client_num):
+    #
+    #         round_client_idx = np.random.choice(ucb_client_idxs, size=round_client_num, replace=False)
+    #
+    #         upper_bound_probs = [ucb_estimated_rewards[item] + ucb_calculate_delta(round * round_client_num + i, ucb_chosen_count, item) for item in
+    #                              round_client_idx]
+    #
+    #         chosen_client_arm = ucb_choose_arm(upper_bound_probs) # 0-10
+    #
+    #         chosen_client_arm = round_client_idx[chosen_client_arm] # real idx
+    #
+    #         reward = calculate_reward(sim_client_state, chosen_client_arm)
+    #
+    #         if reward > 0:
+    #             ucb_total_valid += 1
+    #             round_valid_client_idx[valid_count] = chosen_client_arm
+    #             valid_count += 1
+    #
+    #         total_ucb_reward += reward
+    #
+    #         ucb_estimated_rewards[chosen_client_arm] = (ucb_chosen_count[chosen_client_arm] * ucb_estimated_rewards[chosen_client_arm] + reward) / (
+    #                 ucb_chosen_count[chosen_client_arm] + 1)
+    #
+    #         ucb_chosen_count[chosen_client_arm] += 1
+    #
+    #         # 本轮选过的不再参与选择
+    #         ucb_client_idxs = np.delete(ucb_client_idxs, np.where(ucb_client_idxs == chosen_client_arm))
+    #
+    #
+    #     ucb_chosen_valid_list.append(round_valid_client_idx)
+    #
+    #     ucb_reward_list.append(total_ucb_reward)
+    #
+    #     # linucb choose
+    #     if round == 0:
+    #         for a in range(100):
+    #             linucb_client_feature.append(sim_client_state[a][5:])  # cur_cq, cur_nq, pred_cq, pred_nq, datasize
+    #             # x_t = np.expand_dims(linucb_client_feature[a], axis=1)
+    #             # # 求逆
+    #             # A_inv = np.linalg.inv(A[a])
+    #             # # 相乘
+    #             # theta[a] = np.matmul(A_inv, b[a])
+    #             # # 求臂的p
+    #             # p[a] = np.matmul(theta[a].T, x_t) + alpha * np.sqrt(np.matmul(np.matmul(x_t.T, A_inv), x_t))
+    #
+    #     linucb_client_idxs = client_idxs
+    #
+    #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     valid_count = 0
+    #
+    #     for i in range(round_client_num):
+    #
+    #         round_client_idx = np.random.choice(linucb_client_idxs, size=round_client_num, replace=False)
+    #
+    #         # 求每个臂的p
+    #         for idx in round_client_idx:
+    #             x_t = np.expand_dims(linucb_client_feature[idx], axis=1)
+    #             # 求逆
+    #             A_inv = np.linalg.inv(A[idx])
+    #             # 相乘
+    #             theta[idx] = np.matmul(A_inv, b[idx])
+    #             # 求臂的p
+    #             p[idx] = np.matmul(theta[idx].T, x_t) + alpha * np.sqrt(np.matmul(np.matmul(x_t.T, A_inv), x_t))
+    #
+    #         best_pred_client_arm = int(np.argmax(p[round_client_idx]))
+    #
+    #         chosen_client_arm = round_client_idx[best_pred_client_arm]
+    #
+    #         reward = calculate_reward(sim_client_state, chosen_client_arm)
+    #
+    #         if reward > 0:
+    #             linucb_total_valid += 1
+    #             round_valid_client_idx[valid_count] = chosen_client_arm
+    #             valid_count += 1
+    #
+    #         total_linucb_reward += reward
+    #
+    #         linucb_chosen_count[chosen_client_arm] += 1
+    #
+    #         x_t = np.expand_dims(linucb_client_feature[chosen_client_arm], axis=1)
+    #
+    #         # 更新Aat，bat
+    #         A[chosen_client_arm] = A[chosen_client_arm] + np.matmul(x_t, x_t.T)
+    #         b[chosen_client_arm] = b[chosen_client_arm] + reward * x_t
+    #
+    #         # 本轮选过的client不再参与选择
+    #         linucb_client_idxs = np.delete(linucb_client_idxs, np.where(linucb_client_idxs == chosen_client_arm))
+    #
+    #     linucb_chosen_valid_list.append(round_valid_client_idx)
+    #
+    #     linucb_reward_list.append(total_linucb_reward)
+    #
+    #
+    #     # if round % 50 == 0:
+    #     #     print("\nRound: ", round)
+    #     #     print("total random valid", random_total_valid)
+    #     #     print("total fedcs valid", fedcs_total_valid)
+    #     #     print("total ucb valid", ucb_total_valid)
+    #     #     print("total linucb valid", linucb_total_valid)
 
     # calculate change state reward
-    for round in range(200, 400):
 
-        # random choose
-        round_client_idx = np.random.choice(client_idxs, size=round_client_num, replace=False)
+    # for round in range(200, 400):
+    #
+    #     # random choose
+    #     round_client_idx = np.random.choice(client_idxs, size=round_client_num, replace=False)
+    #
+    #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     valid_count = 0
+    #
+    #     # get random reward
+    #     for idx in round_client_idx:
+    #
+    #         reward = calculate_reward(sim_change_client_state, idx)
+    #
+    #         total_random_reward += reward
+    #
+    #         if reward > 0:
+    #             random_total_valid += 1
+    #             round_valid_client_idx[valid_count] = idx
+    #             valid_count += 1
+    #
+    #
+    #         random_chosen_count[idx] += 1
+    #
+    #     # if len(round_valid_client_idx) < 10:
+    #     #     for k in range(10 - len(round_valid_client_idx)):
+    #     #         round_valid_client_idx.append(-1)
+    #
+    #     random_chosen_valid_list.append(round_valid_client_idx)
+    #
+    #     random_reward_list.append(total_random_reward)
+    #
+    #     # fedcs choose 1
+    #     round_client_idx = np.random.choice(client_idxs, size=int(2.5*round_client_num), replace=False)
+    #
+    #     total_fedcs_selected_num = 0
+    #
+    #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     valid_count = 0
+    #
+    #     for idx in round_client_idx:
+    #
+    #         client_state = sim_change_client_state[idx]
+    #         cur_cq = client_state[5]
+    #         cur_nq = client_state[6]
+    #
+    #         # 只选状态最好的那些
+    #         if cur_cq + cur_nq >= 1.0 and total_fedcs_selected_num < 10:
+    #
+    #             reward = calculate_reward(sim_change_client_state, idx)
+    #
+    #             if reward > 0:
+    #                 fedcs_total_valid += 1
+    #                 round_valid_client_idx[valid_count] = idx
+    #                 valid_count += 1
+    #
+    #             total_fedcs_selected_num += 1
+    #             fedcs_chosen_count[idx] += 1
+    #             total_fedcs_reward += reward
+    #
+    #     fedcs_chosen_valid_list.append(round_valid_client_idx)
+    #
+    #     fedcs_reward_list.append(total_fedcs_reward)
+    #
+    #
+    #     # ucb choose
+    #
+    #     # # ucb init  前十轮 每个都选一次
+    #     # if round < 10:
+    #     #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     #     valid_count = 0
+    #     #
+    #     #     for idx in range(round * 10, round * 10 + 10):
+    #     #         reward = calculate_reward(sim_client_state, idx)
+    #     #
+    #     #         if reward > 0:
+    #     #             ucb_total_valid += 1
+    #     #             round_valid_client_idx[valid_count] = idx
+    #     #             valid_count += 1
+    #     #
+    #     #         total_ucb_reward += reward
+    #     #         ucb_estimated_rewards[idx] = reward
+    #     #
+    #     #         ucb_chosen_count[idx] += 1
+    #     #
+    #     #     ucb_chosen_valid_list.append(round_valid_client_idx)
+    #     #     ucb_reward_list.append(total_ucb_reward)
+    #     #
+    #     # else:
+    #
+    #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     valid_count = 0
+    #
+    #     ucb_client_idxs = client_idxs
+    #
+    #     round_client_idx = []
+    #
+    #     for i in range(round_client_num):
+    #
+    #         round_client_idx = np.random.choice(ucb_client_idxs, size=round_client_num, replace=False)
+    #
+    #         upper_bound_probs = [ucb_estimated_rewards[item] + ucb_calculate_delta(round * round_client_num + i, ucb_chosen_count, item) for item in
+    #                              round_client_idx]
+    #
+    #         chosen_client_arm = ucb_choose_arm(upper_bound_probs) # 0-10
+    #
+    #         chosen_client_arm = round_client_idx[chosen_client_arm] # real idx
+    #
+    #         reward = calculate_reward(sim_change_client_state, chosen_client_arm)
+    #
+    #         if reward > 0:
+    #             ucb_total_valid += 1
+    #             round_valid_client_idx[valid_count] = chosen_client_arm
+    #             valid_count += 1
+    #
+    #         total_ucb_reward += reward
+    #
+    #         ucb_estimated_rewards[chosen_client_arm] = (ucb_chosen_count[chosen_client_arm] * ucb_estimated_rewards[chosen_client_arm] + reward) / (
+    #                 ucb_chosen_count[chosen_client_arm] + 1)
+    #
+    #         ucb_chosen_count[chosen_client_arm] += 1
+    #
+    #         # 本轮选过的不再参与选择
+    #         ucb_client_idxs = np.delete(ucb_client_idxs, np.where(ucb_client_idxs == chosen_client_arm))
+    #
+    #
+    #     ucb_chosen_valid_list.append(round_valid_client_idx)
+    #
+    #     ucb_reward_list.append(total_ucb_reward)
+    #
+    #     # linucb choose
+    #
+    #     if round == 0:
+    #         for a in range(100):
+    #             linucb_client_feature.append(sim_change_client_state[a][5:])  # cur_cq, cur_nq, pred_cq, pred_nq, datasize
+    #             # x_t = np.expand_dims(linucb_client_feature[a], axis=1)
+    #             # # 求逆
+    #             # A_inv = np.linalg.inv(A[a])
+    #             # # 相乘
+    #             # theta[a] = np.matmul(A_inv, b[a])
+    #             # # 求臂的p
+    #             # p[a] = np.matmul(theta[a].T, x_t) + alpha * np.sqrt(np.matmul(np.matmul(x_t.T, A_inv), x_t))
+    #
+    #     linucb_client_idxs = client_idxs
+    #
+    #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+    #     valid_count = 0
+    #
+    #     for i in range(round_client_num):
+    #
+    #         round_client_idx = np.random.choice(linucb_client_idxs, size=round_client_num, replace=False)
+    #
+    #         # 求每个臂的p
+    #         for idx in round_client_idx:
+    #             x_t = np.expand_dims(linucb_client_feature[idx], axis=1)
+    #             # 求逆
+    #             A_inv = np.linalg.inv(A[idx])
+    #             # 相乘
+    #             theta[idx] = np.matmul(A_inv, b[idx])
+    #             # 求臂的p
+    #             p[idx] = np.matmul(theta[idx].T, x_t) + alpha * np.sqrt(np.matmul(np.matmul(x_t.T, A_inv), x_t))
+    #
+    #         best_pred_client_arm = int(np.argmax(p[round_client_idx]))
+    #
+    #         chosen_client_arm = round_client_idx[best_pred_client_arm]
+    #
+    #         reward = calculate_reward(sim_change_client_state, chosen_client_arm)
+    #
+    #         if reward > 0:
+    #             linucb_total_valid += 1
+    #             round_valid_client_idx[valid_count] = chosen_client_arm
+    #             valid_count += 1
+    #
+    #         total_linucb_reward += reward
+    #
+    #         linucb_chosen_count[chosen_client_arm] += 1
+    #
+    #         x_t = np.expand_dims(linucb_client_feature[chosen_client_arm], axis=1)
+    #
+    #         # 更新Aat，bat
+    #         A[chosen_client_arm] = A[chosen_client_arm] + np.matmul(x_t, x_t.T)
+    #         b[chosen_client_arm] = b[chosen_client_arm] + reward * x_t
+    #
+    #         # 本轮选过的client不再参与选择
+    #         linucb_client_idxs = np.delete(linucb_client_idxs, np.where(linucb_client_idxs == chosen_client_arm))
+    #
+    #     linucb_chosen_valid_list.append(round_valid_client_idx)
+    #
+    #     linucb_reward_list.append(total_linucb_reward)
+    #
+    #
+    #     # if round % 50 == 0:
+    #     #     print("\nRound: ", round)
+    #     #     print("total random valid", random_total_valid)
+    #     #     print("total fedcs valid", fedcs_total_valid)
+    #     #     print("total ucb valid", ucb_total_valid)
+    #     #     print("total linucb valid", linucb_total_valid)
 
-        round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-        valid_count = 0
-
-        # get random reward
-        for idx in round_client_idx:
-
-            reward = calculate_reward(sim_change_client_state, idx)
-
-            total_random_reward += reward
-
-            if reward > 0:
-                random_total_valid += 1
-                round_valid_client_idx[valid_count] = idx
-                valid_count += 1
-
-
-            random_chosen_count[idx] += 1
-
-        # if len(round_valid_client_idx) < 10:
-        #     for k in range(10 - len(round_valid_client_idx)):
-        #         round_valid_client_idx.append(-1)
-
-        random_chosen_valid_list.append(round_valid_client_idx)
-
-        random_reward_list.append(total_random_reward)
-
-        # fedcs choose 1
-        round_client_idx = np.random.choice(client_idxs, size=int(2.5*round_client_num), replace=False)
-
-        total_fedcs_selected_num = 0
-
-        round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-        valid_count = 0
-
-        for idx in round_client_idx:
-
-            client_state = sim_change_client_state[idx]
-            cur_cq = client_state[5]
-            cur_nq = client_state[6]
-
-            # 只选状态最好的那些
-            if cur_cq + cur_nq >= 1.0 and total_fedcs_selected_num < 10:
-
-                reward = calculate_reward(sim_change_client_state, idx)
-
-                if reward > 0:
-                    fedcs_total_valid += 1
-                    round_valid_client_idx[valid_count] = idx
-                    valid_count += 1
-
-                total_fedcs_selected_num += 1
-                fedcs_chosen_count[idx] += 1
-                total_fedcs_reward += reward
-
-        fedcs_chosen_valid_list.append(round_valid_client_idx)
-
-        fedcs_reward_list.append(total_fedcs_reward)
-
-
-        # ucb choose
-
-        # # ucb init  前十轮 每个都选一次
-        # if round < 10:
-        #     round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-        #     valid_count = 0
-        #
-        #     for idx in range(round * 10, round * 10 + 10):
-        #         reward = calculate_reward(sim_client_state, idx)
-        #
-        #         if reward > 0:
-        #             ucb_total_valid += 1
-        #             round_valid_client_idx[valid_count] = idx
-        #             valid_count += 1
-        #
-        #         total_ucb_reward += reward
-        #         ucb_estimated_rewards[idx] = reward
-        #
-        #         ucb_chosen_count[idx] += 1
-        #
-        #     ucb_chosen_valid_list.append(round_valid_client_idx)
-        #     ucb_reward_list.append(total_ucb_reward)
-        #
-        # else:
-
-        round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-        valid_count = 0
-
-        ucb_client_idxs = client_idxs
-
-        round_client_idx = []
-
-        for i in range(round_client_num):
-
-            round_client_idx = np.random.choice(ucb_client_idxs, size=round_client_num, replace=False)
-
-            upper_bound_probs = [ucb_estimated_rewards[item] + ucb_calculate_delta(round * round_client_num + i, ucb_chosen_count, item) for item in
-                                 round_client_idx]
-
-            chosen_client_arm = ucb_choose_arm(upper_bound_probs) # 0-10
-
-            chosen_client_arm = round_client_idx[chosen_client_arm] # real idx
-
-            reward = calculate_reward(sim_change_client_state, chosen_client_arm)
-
-            if reward > 0:
-                ucb_total_valid += 1
-                round_valid_client_idx[valid_count] = chosen_client_arm
-                valid_count += 1
-
-            total_ucb_reward += reward
-
-            ucb_estimated_rewards[chosen_client_arm] = (ucb_chosen_count[chosen_client_arm] * ucb_estimated_rewards[chosen_client_arm] + reward) / (
-                    ucb_chosen_count[chosen_client_arm] + 1)
-
-            ucb_chosen_count[chosen_client_arm] += 1
-
-            # 本轮选过的不再参与选择
-            ucb_client_idxs = np.delete(ucb_client_idxs, np.where(ucb_client_idxs == chosen_client_arm))
-
-
-        ucb_chosen_valid_list.append(round_valid_client_idx)
-
-        ucb_reward_list.append(total_ucb_reward)
-
-        # linucb choose
-        alpha = 1
-
-        if round == 0:
-            for a in range(100):
-                linucb_client_feature.append(sim_change_client_state[a][5:])  # cur_cq, cur_nq, pred_cq, pred_nq, datasize
-                # x_t = np.expand_dims(linucb_client_feature[a], axis=1)
-                # # 求逆
-                # A_inv = np.linalg.inv(A[a])
-                # # 相乘
-                # theta[a] = np.matmul(A_inv, b[a])
-                # # 求臂的p
-                # p[a] = np.matmul(theta[a].T, x_t) + alpha * np.sqrt(np.matmul(np.matmul(x_t.T, A_inv), x_t))
-
-        linucb_client_idxs = client_idxs
-
-        round_valid_client_idx = np.array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-        valid_count = 0
-
-        for i in range(round_client_num):
-
-            round_client_idx = np.random.choice(linucb_client_idxs, size=round_client_num, replace=False)
-
-            # 求每个臂的p
-            for idx in round_client_idx:
-                x_t = np.expand_dims(linucb_client_feature[idx], axis=1)
-                # 求逆
-                A_inv = np.linalg.inv(A[idx])
-                # 相乘
-                theta[idx] = np.matmul(A_inv, b[idx])
-                # 求臂的p
-                p[idx] = np.matmul(theta[idx].T, x_t) + alpha * np.sqrt(np.matmul(np.matmul(x_t.T, A_inv), x_t))
-
-            best_pred_client_arm = int(np.argmax(p[round_client_idx]))
-
-            chosen_client_arm = round_client_idx[best_pred_client_arm]
-
-            reward = calculate_reward(sim_change_client_state, chosen_client_arm)
-
-            if reward > 0:
-                linucb_total_valid += 1
-                round_valid_client_idx[valid_count] = chosen_client_arm
-                valid_count += 1
-
-            total_linucb_reward += reward
-
-            linucb_chosen_count[chosen_client_arm] += 1
-
-            x_t = np.expand_dims(linucb_client_feature[chosen_client_arm], axis=1)
-
-            # 更新Aat，bat
-            A[chosen_client_arm] = A[chosen_client_arm] + np.matmul(x_t, x_t.T)
-            b[chosen_client_arm] = b[chosen_client_arm] + reward * x_t
-
-            # 本轮选过的client不再参与选择
-            linucb_client_idxs = np.delete(linucb_client_idxs, np.where(linucb_client_idxs == chosen_client_arm))
-
-        linucb_chosen_valid_list.append(round_valid_client_idx)
-
-        linucb_reward_list.append(total_linucb_reward)
-
-
-        if round % 50 == 0:
-            print("\nRound: ", round)
-            print("total random valid", random_total_valid)
-            print("total fedcs valid", fedcs_total_valid)
-            print("total ucb valid", ucb_total_valid)
-            print("total linucb valid", linucb_total_valid)
-
-    print("total_random_reward: ", total_random_reward)
-    print("total_fedcs_reward: ", total_fedcs_reward)
-    print("total_ucb_reward: ", total_ucb_reward)
-    print("total_linucb_reward: ", total_linucb_reward)
+    # print("total_random_reward: ", total_random_reward)
+    # print("total_fedcs_reward: ", total_fedcs_reward)
+    # print("total_ucb_reward: ", total_ucb_reward)
+    # print("total_linucb_reward: ", total_linucb_reward)
 
     # print("estimated_ucb_reward: \n", ucb_estimated_rewards)
 
@@ -532,6 +747,7 @@ if __name__ == "__main__":
     for i in range(100):
         print("%3d" % int(linucb_chosen_count[i]), end='  ')
 
+    print("")
     print("\nvalid client idx: ")
     valid_client_idx = []
     for i in range(100):
@@ -541,13 +757,14 @@ if __name__ == "__main__":
         next_cq = client_state[3]
         next_nq = client_state[4]
         # if cur_cq + cur_nq + next_cq + next_nq >= 2:
-        if cur_cq + cur_nq >= 1 and next_cq + next_nq >= 1:
+        if cur_cq + cur_nq + next_cq + next_nq >= 2:
             valid_client_idx.append(1)
         else:
             valid_client_idx.append(0)
 
     for i in range(100):
         print("%3d" % valid_client_idx[i], end='  ')
+
 
     print("\nvalid change client idx: ")
     valid_client_idx = []
@@ -558,7 +775,7 @@ if __name__ == "__main__":
         next_cq = client_state[3]
         next_nq = client_state[4]
         # if cur_cq + cur_nq + next_cq + next_nq >= 2:
-        if cur_cq + cur_nq >= 1 and next_cq + next_nq >= 1:
+        if cur_cq + cur_nq + next_cq + next_nq >= 2:
             valid_client_idx.append(1)
         else:
             valid_client_idx.append(0)
@@ -567,14 +784,19 @@ if __name__ == "__main__":
         print("%3d" % valid_client_idx[i], end='  ')
 
 
+    optimal_reward_list = np.linspace(0, 4000, 401)
+
+
     # x = np.arange(round_num)
-    x = np.arange(400)
+    x = np.arange(200)
+    # plt.ylim(0, 4000)
     plt.xlabel("round")
     plt.ylabel("cumulative reward")
     plt.plot(x, random_reward_list, label='random')
     plt.plot(x, fedcs_reward_list, label='fedcs')
     plt.plot(x, ucb_reward_list, label='ucb')
     plt.plot(x, linucb_reward_list, label='linucb')
+    plt.plot(x, optimal_reward_list[:200], label='optimal')
     plt.legend()
     plt.show()
 

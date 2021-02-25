@@ -130,14 +130,14 @@ def plot_cifar_result(interval=3):
     mab_mean = [i / 100 for i in mab_mean]
     fedcs_mean = [i / 100 for i in fedcs_mean]
 
-    plt.plot(x, fedavg_mean, 'o-', linewidth=1.5, color='#59a869', label='FedAvg [Google Team]')
-    plt.fill_between(x, fedavg_min, fedavg_max, color='#59a869', alpha=0.25)
-    plt.plot(x, linucb_mean, 'v-', linewidth=1.5, color='#d62728', label='Proposed')
-    plt.fill_between(x, linucb_min, linucb_max, color='#d62728', alpha=0.25)
-    plt.plot(x, mab_mean, '*-', linewidth=1.5, color='#ff7f0e', label='MAB-based [Yoshida, 2020]')
-    plt.fill_between(x, mab_min, mab_max, color='#ff7f0e', alpha=0.25)
-    plt.plot(x, fedcs_mean, '+--', linewidth=1.5, color='#1f77b4', label='FedCS [Nishio, 2019]')
-    plt.fill_between(x, fedcs_min, fedcs_max, color='#1f77b4', alpha=0.25)
+    plt.plot(x, fedavg_mean, '.-', linewidth=1.5, color='#1f77b4', label='FedAvg [McMahan, 2016]')
+    # plt.fill_between(x, fedavg_min, fedavg_max, color='#59a869', alpha=0.25)
+    plt.plot(x, fedcs_mean, 'd-', linewidth=1.5, color='#ff7f0e', label='FedCS [Nishio, 2019]')
+    # plt.fill_between(x, fedcs_min, fedcs_max, color='#1f77b4', alpha=0.25)
+    plt.plot(x, mab_mean, '*-', linewidth=1.5, color='#2ca02c', label='MAB-based [Yoshida, 2020]')
+    # plt.fill_between(x, mab_min, mab_max, color='#ff7f0e', alpha=0.25)
+    plt.plot(x, linucb_mean, 'v-', linewidth=1.5, color='#d62728', label='cMAB-based (Proposed)')
+    # plt.fill_between(x, linucb_min, linucb_max, color='#d62728', alpha=0.25)
 
     plt.ylim(0.1, 0.64)
 

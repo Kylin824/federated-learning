@@ -135,8 +135,8 @@ def create_change_client_state():
             c[2] = c[0]
         else:
             c[2] = np.random.randint(low=0, high=8)
-        c[7] = np.random.normal(loc=poi_cu_prob[int(c[2])], scale=0.1, size=1)
-        c[8] = np.random.normal(loc=poi_cq_prob[int(c[2])], scale=0.1, size=1)
+        c[7] = np.random.normal(loc=poi_cu_prob[int(c[2])], scale=0.1, size=1) # pred_computation
+        c[8] = np.random.normal(loc=poi_cq_prob[int(c[2])], scale=0.1, size=1) # pred_communication
 
         c[9] = len(client_dataset[i]) / 1000
 
@@ -190,13 +190,20 @@ def create_change_client_state_plus():
         reward = 0
         if cur_cq + cur_nq + next_cq + next_nq >= 2:
             # reward = cur_cq + cur_nq + next_cq + next_nq - 2 + client_datasize * beta
-            client_state[6] = 2 - (cur_cq + next_cq + next_nq) - np.random.normal(loc=0.05, scale=0.1, size=1)
-            client_state[4] = 2 - (cur_cq + cur_nq + next_cq) - np.random.normal(loc=0.05, scale=0.1, size=1)
+            # client_state[6] = 2 - (cur_cq + next_cq + next_nq) - np.random.normal(loc=0.1, scale=0.1, size=1)
+            # client_state[4] = 2 - (cur_cq + cur_nq + next_cq) - np.random.normal(loc=0.1, scale=0.1, size=1)
+            # client_state[6] = 2 - (cur_cq + next_cq + next_nq) - np.random.normal(loc=0.1, scale=0.1, size=1)
+            client_state[6] = 1 - client_state[6]
+            client_state[4] = 1 - client_state[4] - 0.075
+            client_state[8] = 1 - client_state[8] - 0.075
             print('valid: ', idx)
         else:
             # reward = -0.05
-            client_state[6] = 2 - (cur_cq + next_cq + next_nq) + np.random.normal(loc=0.05, scale=0.1, size=1)
-            client_state[4] = 2 - (cur_cq + cur_nq + next_cq) + np.random.normal(loc=0.05, scale=0.1, size=1)
+            # client_state[6] = 2 - (cur_cq + next_cq + next_nq) + np.random.normal(loc=0.1, scale=0.1, size=1)
+            # client_state[4] = 2 - (cur_cq + cur_nq + next_cq) + np.random.normal(loc=0.1, scale=0.1, size=1)
+            client_state[6] = 1 - client_state[6]
+            client_state[4] = 1 - client_state[4] + 0.075
+            client_state[8] = 1 - client_state[8] + 0.075
             print('fail: ', idx)
 
     np.save('simulative__change_client_state.npy', client_state_list)
