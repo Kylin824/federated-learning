@@ -194,16 +194,16 @@ def create_change_client_state_plus():
             # client_state[4] = 2 - (cur_cq + cur_nq + next_cq) - np.random.normal(loc=0.1, scale=0.1, size=1)
             # client_state[6] = 2 - (cur_cq + next_cq + next_nq) - np.random.normal(loc=0.1, scale=0.1, size=1)
             client_state[6] = 1 - client_state[6]
-            client_state[4] = 1 - client_state[4] - 0.075
-            client_state[8] = 1 - client_state[8] - 0.075
+            client_state[4] = 1 - client_state[4]
+            # client_state[8] = 1 - client_state[8] - 0.075
             print('valid: ', idx)
         else:
             # reward = -0.05
             # client_state[6] = 2 - (cur_cq + next_cq + next_nq) + np.random.normal(loc=0.1, scale=0.1, size=1)
             # client_state[4] = 2 - (cur_cq + cur_nq + next_cq) + np.random.normal(loc=0.1, scale=0.1, size=1)
             client_state[6] = 1 - client_state[6]
-            client_state[4] = 1 - client_state[4] + 0.075
-            client_state[8] = 1 - client_state[8] + 0.075
+            client_state[4] = 1 - client_state[4]
+            # client_state[8] = 1 - client_state[8] + 0.075
             print('fail: ', idx)
 
     np.save('simulative__change_client_state.npy', client_state_list)
