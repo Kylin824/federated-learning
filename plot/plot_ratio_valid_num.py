@@ -3,10 +3,18 @@ import numpy as np
 
 label_list = ['50', '100', '150', '200']  # 横坐标刻度显示值
 
-fedavg_list = np.array([117, 268, 388, 516])  # 纵坐标值1
-fedcs_list = np.array([219, 432, 646, 848])  # 纵坐标值2
-mab_list = np.array([239, 520, 891, 1271])  # 纵坐标值3
-linucb_list = np.array([429, 895, 1361, 1822])  # 纵坐标值4
+# # niid
+# fedavg_list = np.array([117, 267, 387, 521])  # 纵坐标值1
+# fedcs_list = np.array([219, 432, 646, 847])  # 纵坐标值2
+# mab_list = np.array([203, 443, 688, 1020])  # 纵坐标值3
+# linucb_list = np.array([388, 823, 1273, 1732])  # 纵坐标值4
+# optimal_list = np.array([500, 1000, 1500, 2000])  # 纵坐标值4
+
+# iid
+fedavg_list = np.array([117, 267, 400, 520])  # 纵坐标值1
+fedcs_list = np.array([219, 431, 656, 845])  # 纵坐标值2
+mab_list = np.array([216, 505, 907, 1298])  # 纵坐标值3
+linucb_list = np.array([425, 890, 1360, 1826])  # 纵坐标值4
 optimal_list = np.array([500, 1000, 1500, 2000])  # 纵坐标值4
 
 fedavg_choose_list = np.array([500, 1000, 1500, 2000])

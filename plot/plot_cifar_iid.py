@@ -130,22 +130,28 @@ def plot_cifar_result(interval=3):
     mab_mean = [i / 100 for i in mab_mean]
     fedcs_mean = [i / 100 for i in fedcs_mean]
 
-    plt.plot(x, fedavg_mean, '.-', linewidth=1.5, color='#1f77b4', label='FedAvg [McMahan, 2016]')
-    # plt.fill_between(x, fedavg_min, fedavg_max, color='#1f77b4', alpha=0.25)
-    plt.plot(x, fedcs_mean, 'd-', linewidth=1.5, color='#ff7f0e', label='FedCS [Nishio, 2019]')
-    # plt.fill_between(x, fedcs_min, fedcs_max, color='#ff7f0e', alpha=0.25)
-    plt.plot(x, mab_mean, '*-', linewidth=1.5, color='#2ca02c', label='MAB-based [Yoshida, 2020]')
-    # plt.fill_between(x, mab_min, mab_max, color='#2ca02c', alpha=0.25)
-    plt.plot(x, linucb_mean, 'v-', linewidth=1.5, color='#d62728', label='cMAB-based (Proposed)')
-    # plt.fill_between(x, linucb_min, linucb_max, color='#d62728', alpha=0.25)
+    # plt.plot(x, fedavg_mean, '.-', linewidth=1.5, color='#1f77b4', label='FedAvg [McMahan, 2016]')
+    # # plt.fill_between(x, fedavg_min, fedavg_max, color='#1f77b4', alpha=0.25)
+    # plt.plot(x, fedcs_mean, 'd-', linewidth=1.5, color='#ff7f0e', label='FedCS [Nishio, 2019]')
+    # # plt.fill_between(x, fedcs_min, fedcs_max, color='#ff7f0e', alpha=0.25)
+    # plt.plot(x, mab_mean, '*-', linewidth=1.5, color='#2ca02c', label='MAB-based [Yoshida, 2020]')
+    # # plt.fill_between(x, mab_min, mab_max, color='#2ca02c', alpha=0.25)
+    # plt.plot(x, linucb_mean, 'v-', linewidth=1.5, color='#d62728', label='cMAB-based (Proposed)')
+    # # plt.fill_between(x, linucb_min, linucb_max, color='#d62728', alpha=0.25)
+
+    plt.plot(x, fedavg_mean, 'd:', markersize=6, linewidth=1.5, color='#1f77b4', label='FedAvg [McMahan, 2016]')
+    plt.plot(x, fedcs_mean, 'v-.', markersize=6, linewidth=1.5, color='#ff7f0e', label='FedCS [Nishio, 2019]')
+    plt.plot(x, mab_mean, 's--', markersize=6, linewidth=1.5, color='#2ca02c', label='MAB-based [Yoshida, 2020]')
+    plt.plot(x, linucb_mean, '^-', markersize=6, linewidth=1.5, color='#d62728', label='cMAB-based (Proposed)')
+
 
     plt.ylim(0.1, 0.64)
 
     # plt.rcParams['figure.figsize'] = (6, 4)
-    plt.xlabel('FL Rounds', fontdict={'size': 21})
+    plt.xlabel('FL Rounds', fontdict={'size': 20})
     plt.ylabel('Test Accuracy', fontdict={'size': 20})
     plt.tick_params(labelsize=18)
-    leg = ax.legend(fontsize=15)  # , frameon=False)
+    leg = ax.legend(fontsize=17)  # , frameon=False)
     leg.set_draggable(True)
     plt.title('CIFAR-10 (i.i.d.)', fontdict={'size': 20})
     plt.tight_layout()

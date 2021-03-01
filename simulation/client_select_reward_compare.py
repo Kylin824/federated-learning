@@ -53,7 +53,8 @@ def calculate_reward(client_state, client_idx):
         # reward = cur_cq + cur_nq + next_cq + next_nq - client_datasize * beta
         # reward = 1 + client_datasize
         # reward = 1 * client_datasize
-        reward = 1000 * client_datasize
+        reward = 1
+        # reward = 1000 * client_datasize
     # else:
     #     reward = -0.1
 
@@ -512,12 +513,12 @@ if __name__ == "__main__":
         linucb_reward_list.append(total_linucb_reward)
 
 
-        # if round % 50 == 0:
-        #     print("\nRound: ", round)
-        #     print("total random valid", random_total_valid)
-        #     print("total fedcs valid", fedcs_total_valid)
-        #     print("total ucb valid", ucb_total_valid)
-        #     print("total linucb valid", linucb_total_valid)
+        if round % 50 == 0:
+            print("\nRound: ", round)
+            print("total random valid", random_total_valid)
+            print("total fedcs valid", fedcs_total_valid)
+            print("total ucb valid", ucb_total_valid)
+            print("total linucb valid", linucb_total_valid)
 
     # calculate change state reward
 
@@ -807,10 +808,10 @@ if __name__ == "__main__":
     print("total ucb valid", ucb_total_valid)
     print("total linucb valid", linucb_total_valid)
 
-    np.savetxt('random_reward_list.txt', random_reward_list)
-    np.savetxt('fedcs_reward_list.txt', fedcs_reward_list)
-    np.savetxt('ucb_reward_list.txt', ucb_reward_list)
-    np.savetxt('linucb_reward_list.txt', linucb_reward_list)
+    # np.savetxt('noniid_random_reward_list.txt', random_reward_list)
+    # np.savetxt('noniid_fedcs_reward_list.txt', fedcs_reward_list)
+    # np.savetxt('noniid_ucb_reward_list.txt', ucb_reward_list)
+    # np.savetxt('noniid_linucb_reward_list.txt', linucb_reward_list)
 
 
     # 保存历史选择
