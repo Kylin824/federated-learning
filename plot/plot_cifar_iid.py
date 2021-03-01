@@ -153,7 +153,7 @@ def plot_cifar_result(interval=3):
     plt.tick_params(labelsize=18)
     leg = ax.legend(fontsize=17)  # , frameon=False)
     leg.set_draggable(True)
-    plt.title('CIFAR-10 (i.i.d.)', fontdict={'size': 20})
+    # plt.title('CIFAR-10 (i.i.d.)', fontdict={'size': 20})
     plt.tight_layout()
     plt.show()
 

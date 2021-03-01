@@ -162,7 +162,7 @@ def plot_cifar_result(interval=3):
     plt.tick_params(labelsize=18)
     leg = ax.legend(fontsize=17)  # , frameon=False)
     leg.set_draggable(True)
-    plt.title('MNIST (i.i.d.)', fontdict={'size': 20})
+    # plt.title('MNIST (i.i.d.)', fontdict={'size': 20})
 
     # ax1 = fig.add_axes([0.66, 0.58, 0.24, 0.24])  # 不用figure的形式则无须用set
     # x = [150, 160, 170, 180, 190, 200]
